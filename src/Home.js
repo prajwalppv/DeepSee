@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { CenteredHeader,AppDiv, ContainerDiv } from './App.js'
 import Background from './img/logo.png';
+import ImagePerturbation from './img/imagepert.png'
 import { Link } from 'react-router-dom'
 import { ResponsiveImage, ResponsiveImageSize } from 'react-responsive-image';
 import styled from 'styled-components';
@@ -12,24 +13,37 @@ const Logo = styled.img`
   border-radius: 50%;
 `;
 
+const Img = styled.img`
+  width: 70%;
+  height: 70%;
+`;
+
 const PeopleImage = styled.img`
   width: 10em;
   height: 10em;
 `;
 
 const HeaderDiv = styled.div`
+  background-color: #282c34;
   padding-top: 5vh;
   text-align: center;
   font-family: 'Zilla Slab Highlight', sans-serif;
   color: black;
 `;
 
+
 const StyledBody = styled.body`
-background-color: #282c34;
 `
-const StyledP = styled.p`
-size: 45;
-color: #282c88
+
+const StyledDiv = styled.div`
+  text-align: center;
+  font-family: 'Zilla Slab Highlight', sans-serif;
+  color: black
+
+`
+const StyledH4 = styled.h4`
+size: 10;
+color: #288c88
 `
 
 const ProfileTitle = styled.h1`
@@ -52,8 +66,14 @@ class Home extends Component {
         <ProfileTitle>&nbsp; </ProfileTitle>
       </HeaderDiv>
 
+        <StyledDiv>
+        <Img src={require('./img/wordcloud.png')} alt='WordCloud'/>
+
+      </StyledDiv>
 
     </StyledBody>
+
+
 
     );
   }
