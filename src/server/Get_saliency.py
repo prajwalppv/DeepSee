@@ -3,8 +3,8 @@ from PIL import Image
 from skimage.transform import resize
 import numpy as np
 from keras.models import load_model
-from viz.saliency import GradientSaliency
-from viz.guided_backprop import GuidedBackprop
+from saliency import GradientSaliency
+from guided_backprop import GuidedBackprop
 from matplotlib import pylab as plt
 import matplotlib as mpl
 import keras.backend as k
