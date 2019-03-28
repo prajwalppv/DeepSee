@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { CenteredHeader,AppDiv, ContainerDiv } from './App.js'
 import Background from './img/logo.png';
-import ImagePerturbation from './img/imagepert.png'
 import { Link } from 'react-router-dom'
 import { ResponsiveImage, ResponsiveImageSize } from 'react-responsive-image';
 import styled from 'styled-components';
