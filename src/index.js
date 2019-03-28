@@ -9,6 +9,7 @@ import { Button } from 'evergreen-ui';
 import NavBar from './navBar';
 import UploadImage from './Images';
 import App from './App';
+import Home from './Home';
 import Visualize from "./Visualize";
 
 const element = (
@@ -18,7 +19,7 @@ const element = (
             <NavBar/>
         </div>
         <div className='container'>
-            <Route path="/Home" component={App}/>
+            <Route path="/Home" component={Home}/>
             <Route path="/Visualize" component={Visualize}/>
             <Route path="/Images" component={UploadImage}/>
             {/* <Route path="/Help" component={Help}/> */}
