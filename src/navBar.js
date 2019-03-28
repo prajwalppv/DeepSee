@@ -5,7 +5,7 @@ import {Link}  from 'react-router-dom';
 
 class NavBar extends Component{
     state={
-        tabs: ['Home','Visualize','Images','Help'],
+        tabs: ['Home','Visualize','Images'], //,'Help'],
         icons:['home','series-configuration','cloud-upload','help']
     }
     render(){
@@ -19,7 +19,7 @@ class NavBar extends Component{
             id={tab}
             iconBefore={this.state.icons[index]}
             aria-controls={`panel-${tab}`}
-            href={tab}
+            href={(tab=='Home')?"/":tab}
             height={48}
           >
           {tab}

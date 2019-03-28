@@ -13,13 +13,13 @@ import Home from './Home';
 import Visualize from "./Visualize";
 
 const element = (
-    <Router>
+    <Router component={Home}>
     <div className='main'>
         <div className='nav'>
             <NavBar/>
         </div>
         <div className='container'>
-            <Route path="/Home" component={Home}/>
+            <Route path="/" exact={true} component={Home}/>
             <Route path="/Visualize" component={Visualize}/>
             <Route path="/Images" component={UploadImage}/>
             {/* <Route path="/Help" component={Help}/> */}

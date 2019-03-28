@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom'
+// import ReactDOM from 'react-dom'
 import { Button, Pane, Tab, TabNavigation, Paragraph, Tablist, SidebarTab ,Text, Strong} from 'evergreen-ui'
-import {Link}  from 'react-router-dom';
-import NavBar from "./navBar";
+// import {Link}  from 'react-router-dom';
+// import NavBar from "./navBar";
 import ImagePertubation from "./ImagePertubation"
 import App from "./App";
-import {BrowserRouter as Router,Route}  from 'react-router-dom';
+// import {BrowserRouter as Router,Route}  from 'react-router-dom';
 
 class Visualize extends Component{
     state={

@@ -1,5 +1,15 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Required Node Modules
+
+Download the following modules in order to run this site
+```
+npm install --save react-loading-overlay
+npm install --save styled-components
+npm install --save react-router-dom
+npm install --save evergreen-ui
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
