@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import { Button } from 'evergreen-ui';
-import NavBar from './navBar'
-import UploadImage from './Images'
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter as Router,Route}  from 'react-router-dom';
+import { Button } from 'evergreen-ui';
+
+// Import custom components
+import NavBar from './navBar';
+import UploadImage from './Images';
+import App from './App';
+import Visualize from "./Visualize";
 
 const element = (
     <Router>
@@ -16,7 +19,7 @@ const element = (
         </div>
         <div className='container'>
             <Route path="/Home" component={App}/>
-            {/* <Route path="/Visualize" component={Visualize}/> */}
+            <Route path="/Visualize" component={Visualize}/>
             <Route path="/Images" component={UploadImage}/>
             {/* <Route path="/Help" component={Help}/> */}
         </div>

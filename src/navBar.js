@@ -5,7 +5,6 @@ import {Link}  from 'react-router-dom';
 
 class NavBar extends Component{
     state={
-        selectedIndex:0,
         tabs: ['Home','Visualize','Images','Help'],
         icons:['home','series-configuration','cloud-upload','help']
     }
@@ -19,8 +18,6 @@ class NavBar extends Component{
             is='a'
             id={tab}
             iconBefore={this.state.icons[index]}
-            onSelect={() => this.setState({ selectedIndex: index })}
-            isSelected={index === this.state.selectedIndex}
             aria-controls={`panel-${tab}`}
             href={tab}
             height={48}
