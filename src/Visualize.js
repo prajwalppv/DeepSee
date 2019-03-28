@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { Button, Pane, Tab, TabNavigation, Paragraph, Tablist, SidebarTab ,Text, Strong} from 'evergreen-ui'
 import {Link}  from 'react-router-dom';
 import NavBar from "./navBar";
+import ImagePertubation from "./ImagePertubation"
 import App from "./App";
 import {BrowserRouter as Router,Route}  from 'react-router-dom';
 
@@ -10,7 +11,7 @@ class Visualize extends Component{
     state={
         selectedIndex:0,
         tabs: ['Image Perturbation','Saliency Maps','Channel Activations','Semantic dictionaries'],
-        components: [<App/>,<App/>,<App/>,<App/>],
+        components: [<ImagePertubation/>,<App/>,<App/>,<App/>],
         icons:['home','series-configuration','cloud-upload','help']
     }
 

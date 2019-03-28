@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { CenteredHeader,AppDiv, ContainerDiv } from './App.js'
-import Background from './img/logo.png';
+// import { CenteredHeader,AppDiv, ContainerDiv } from './App.js'
+// import Background from './img/logo.png';
 import { Link } from 'react-router-dom'
-import { ResponsiveImage, ResponsiveImageSize } from 'react-responsive-image';
+// import { ResponsiveImage, ResponsiveImageSize } from 'react-responsive-image';
 import styled from 'styled-components';
-import { AppRegistry, View } from 'react-native';
+// import { AppRegistry, View } from 'react-native';
 
 const Logo = styled.img`
   width: 24em;
