@@ -57,7 +57,7 @@ def getRegionsofInterest(imageLoc, numchunksV, numchunksH):
   perturbedImages, positions, hrun, vrun = createPerturbedImages(image, numchunksV, numchunksH)
   inp = np.expand_dims(image, axis=0)
 
-
+  K.clear_session()
   model = load_model('./model.h5')
   correctPrediction = model.predict(inp)[0][0]
 

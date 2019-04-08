@@ -13,7 +13,7 @@ import Home from './Home';
 import Visualize from "./Visualize";
 
 const element = (
-    <Router component={Home}>
+    <Router>
     <div className='main'>
         <div className='nav'>
             <NavBar/>
@@ -22,7 +22,6 @@ const element = (
             <Route path="/" exact={true} component={Home}/>
             <Route path="/Visualize" component={Visualize}/>
             <Route path="/Images" component={UploadImage}/>
-            {/* <Route path="/Help" component={Help}/> */}
         </div>
     </div>
     </Router>

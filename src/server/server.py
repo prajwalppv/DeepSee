@@ -2,6 +2,8 @@ import flask
 from flask_cors import CORS, cross_origin
 import base64
 from perturbation import getRegionsofInterest
+from gradientVis import get_saliency, get_Guided_backProp
+
 
 app = flask.Flask(__name__)
 
@@ -23,9 +25,8 @@ def uploadModel():
 def uploadImage():
     results = {'success':False}
 
-    global image 
     uploadedFile = flask.request.files['image']
-    uploadedFile.save('currentImage')
+    uploadedFile.save('currentImage.png')
     results['success'] = True
     
     return flask.jsonify(results)
@@ -41,18 +42,50 @@ def convertImage2String(inputFile):
 @cross_origin()
 def perturb():
     results = {'success':False}
-    results['attempt'] = 50
 
-    if True: #image is not None:
-      args = flask.request.headers
-      widthC, heightC = int(args['widthC']), int(args['heightC'])
+    args = flask.request.headers
+    widthC, heightC = int(args['widthC']), int(args['heightC'])
 
-      finalImage = getRegionsofInterest('currentImage', heightC, widthC)
-      finalImage.save('result.jpg')
-      results['success'] = True
-      results['imagestr'] = convertImage2String('result.jpg')
+    finalImage = getRegionsofInterest('currentImage.png', heightC, widthC)
+    finalImage.save('result.jpg')
+    results['success'] = True
+    results['imagestr'] = convertImage2String('result.jpg')
 
     return flask.jsonify(results)
+
+
+@app.route("/saliency", methods=['POST'])
+@cross_origin()
+def saliency():
+  results = {'success':False}
+  
+  grad_fileName = 'result.png'
+  smooth_fileName = 'resultSmooth.png'
+
+  get_saliency('currentImage', 'model.h5', grad_fileName, smooth_fileName)
+
+  results['success'] = True
+  results['originalImage'] = convertImage2String('currentImage.png')
+  results['imagestrSmooth'] = convertImage2String(smooth_fileName)
+  results['imagestrGrad'] = convertImage2String(grad_fileName)
+
+  return flask.jsonify(results)
+
+
+@app.route("/guidedBP", methods=['POST'])
+@cross_origin()
+def guidedBP():
+  results = {'success':False}
+  
+  result_fileName = 'result.png'
+
+  get_Guided_backProp('currentImage', 'model.h5', result_fileName)
+
+  results['success'] = True
+  results['originalImage'] = convertImage2String('currentImage.png')
+  results['imagestrResult'] = convertImage2String(result_fileName)
+
+  return flask.jsonify(results)
 
 if __name__ == "__main__":
   app.run()
