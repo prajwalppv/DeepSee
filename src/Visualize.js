@@ -7,14 +7,14 @@ import ImagePertubation from "./ImagePertubation"
 import GuidedBackProp from "./GuidedBackProp"
 import Saliency from "./Saliency"
 import App from "./App";
-import SemanticDictionary from "./SemanticDictionary";
+// import SemanticDictionary from "./SemanticDictionary";
 // import {BrowserRouter as Router,Route}  from 'react-router-dom';
 
 class Visualize extends Component{
     state={
         selectedIndex:0,
         tabs: ['Image Perturbation','Saliency Maps','Guided BackProp','Channel Activations','Semantic dictionaries'],
-        components: [<ImagePertubation/>,<Saliency/>,<GuidedBackProp/>,<App/>,<SemanticDictionary/>],
+        components: [<ImagePertubation/>,<Saliency/>,<GuidedBackProp/>,<App/>],
         icons:['home','series-configuration','cloud-upload','help']
     }
 
