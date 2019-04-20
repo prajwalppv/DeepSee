@@ -4,13 +4,12 @@ import './SemanticDictionary.css';
 import LoadingOverlay from 'react-loading-overlay';
 import { Button, TextInputField } from 'evergreen-ui'
 import ImageMapper from 'react-image-mapper';
-import SvelteComponent from 'react-svelte';
 import ReactHtmlParser, {processNodes, convertNodeToElement, htmlparser2} from 'react-html-parser'
-
+import bg from "./img/activation.jpeg"
 
 class SemacticDictonary extends Component{
 
-    state = {hoveredArea:null}
+    state = {hoveredArea:null,subImages:null}
     n = 14
     size = 500
     URL = "./img/wordcloud.png"
@@ -46,78 +45,36 @@ class SemacticDictonary extends Component{
       return areas
     }
 
-    // The crop function
-    crop(canvas, offsetX, offsetY, width, height, callback) {
-      // create an in-memory canvas
-      var buffer = document.createElement('canvas');
-      var b_ctx = buffer.getContext('2d');
-      // set its width/height to the required ones
-      buffer.width = width;
-      buffer.height = height;
-      // draw the main canvas on our buffer one
-      // drawImage(source, source_X, source_Y, source_Width, source_Height,
-      //  dest_X, dest_Y, dest_Width, dest_Height)
-      b_ctx.drawImage(canvas, offsetX, offsetY, width, height,
-                      0, 0, buffer.width, buffer.height);
-      // now call the callback with the dataURL of our buffer canvas
-      console.log(buffer)
-//      callback(buffer.toDataURL());
-    };
-
-
-    // #main canvas Part
-    getSubImage1(area){
-    let canvas = document.getElementById('canvas');
-    this.img = new Image();
-    this.img.crossOrigin = "Anonymous";
-    console.log(this.img)
-
-
-    this.img.onload = ()=>{
-        console.log("onload")
-      canvas.width = 500;
-      canvas.height = 500;
-      canvas.getContext('2d').drawImage(this, 0, 0);
-      // set a little timeout before calling our cropping thing
-      setTimeout(function() {
-        this.crop(canvas, 100, 70, 70, 70, this.callback)
-      }, 1000);
-    };
-
-    this.img.src = "img/activation.jpeg";
-    console.log("done")
-    }
-
-// what to do with the dataURL of our cropped image
-    callback() {
-    }
-
-    getSubImage(area){
-        console.log(area)
-        const data = new FormData()
-        data.append('image', "../img/activation.jpeg")
-        data.append('n', area.n)
-        data.append('sprite_n_wrap', 14)
-
-
-        fetch(`http://127.0.0.1:5000/getSubImage`, {
-              method: ['POST'],
-              body: data
-          }).then((response) =>{
-              console.log(response.json())
-              })
-    }
 
     enterArea(area) {
         this.setState({ hoveredArea: area });
+        console.log("here")
     }
 
     leaveArea(area) {
-        this.setState({ hoveredArea: null });
+        this.setState({ subImages: null });
     }
 
     getTipPosition(area) {
+        let subImg = [];
         this.setState({ hoveredArea: area });
+        console.log(this.state.hoveredArea)
+        let ns = [Math.floor((Math.random() * 100) + 1),Math.floor((Math.random() * 100) + 1),Math.floor((Math.random() * 100) + 1),Math.floor((Math.random() * 100) + 1)];
+        let src = 'img/activation.jpeg'
+        let sprite_n_wrap = 14;
+        let sprite_size= 88;
+
+        for (let i=0;i<4;i++){
+            let a = -sprite_size*(ns[i]%sprite_n_wrap)
+            let b = -sprite_size*Math.floor(ns[i]/sprite_n_wrap)
+
+            console.log(ns[i])
+            subImg.push(<div key={i} style={{backgroundImage: 'url('+ bg+')',width:'88px',height:'88px',float:'left',margin:'15px',backgroundPosition:`${a}px ${b}px`}}></div>)
+        }
+        console.log(subImg);
+        this.setState({subImages:subImg})
+
+
     }
 
 
@@ -125,17 +82,16 @@ class SemacticDictonary extends Component{
 render(){
     return(
     <div className="container">
-    {console.log(this.URL)}
-    {console.log(this.MAP)}
     {console.log(this.state)}
-        <ImageMapper src={require('./img/wordcloud.png')} map={this.MAP} width={500} height={500}
-        onClick={area => this.getSubImage1(area)}
+        <ImageMapper src={require('./img/chest-xray.jpg')} map={this.MAP} width={500} height={500}
+        onMouseEnter = {area =>this.getTipPosition(area)}
+        onMouseLeave = {area => this.leaveArea(area)}
+        onClick={area => this.getTipPosition(area)}
+
 
     	/>
-        {this.state.hoveredArea!==null? <div><img src={require('./img/activation.jpeg')} width={500} height={500}/></div> : <div>NO AREAA SELECTED</div>
-        }
 
-        <canvas id="canvas" width="500" height="500">HERE</canvas>
+        {this.state.subImages!==null? <div className="dict" > {this.state.subImages}</div>  : <div>Hover over an area on the image to see activations</div>}
 
     </div>
 
