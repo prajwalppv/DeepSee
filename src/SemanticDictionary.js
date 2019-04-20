@@ -4,7 +4,6 @@ import './SemanticDictionary.css';
 import LoadingOverlay from 'react-loading-overlay';
 import { Button, TextInputField } from 'evergreen-ui'
 import ImageMapper from 'react-image-mapper';
-import SvelteComponent from 'react-svelte';
 import ReactHtmlParser, {processNodes, convertNodeToElement, htmlparser2} from 'react-html-parser'
 import bg from "./img/activation.jpeg"
 
