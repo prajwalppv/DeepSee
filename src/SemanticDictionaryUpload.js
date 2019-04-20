@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import UploadButton from './Button';
 import './Saliency.css';
 import LoadingOverlay from 'react-loading-overlay';
-import { Button, TextInputField } from 'evergreen-ui';
+import { Button, TextInputField, Select, Heading, toaster } from 'evergreen-ui';
 import SemanticDictionary from './SemanticDictionary';
 
 class SemDictUpload extends Component {
 state = {loading:false, image:false,
             widthC:3, heightC:3, hasResult:false,
-            originalImage:null, resultGrad:null, resultSmooth:null}
+            originalImage:null, resultGrad:null, resultSmooth:null, layer:null}
 
 
   onImageChange = e => {
@@ -25,9 +25,17 @@ state = {loading:false, image:false,
 
   onGenerateChange = e => {
     this.setState({hasResult:false, loading:true, activations:null})
+    const data = new FormData()
+    if (this.state.layer == null){
+        toaster.danger("Choose a valid layer to visualize")
+        }
+    console.log(this.state.layer)
+    data.append('layer', this.state.layer)
+
     fetch(`http://127.0.0.1:5000/semanticDictionary`, {
           method: ['POST'],
-          timeout: 2000
+          timeout: 2000,
+          body:data
       }).then(res =>{
               return res.json()
               })
@@ -38,16 +46,28 @@ state = {loading:false, image:false,
         .catch(e => console.error(e))
 
   }
+
+  onSelectChange = e =>{
+    this.setState({layer:e.target.value})
+  }
+
 render(){
-    const {loading, hasResult, image} = this.state
+    const {loading, hasResult, image, layer} = this.state
     const content = () => {
     return <div>
 
               <div style={{display: "inline-block", padding:20}}>
                 <UploadButton onChange={this.onImageChange} name='Image'/>
               </div>
+              <div style={{display: "inline-block", padding:20}}>
+                <Heading size={600} color='white'> Choose a layer </Heading>
+                <Select  width={240} onChange={event=> this.onSelectChange(event)}>
+                  <option value="conv4_block1_concat/concat">Conv4_block1_concat/concat</option>
+                  <option value="bar">Bar</option>
+                </Select>
+              </div>
               <div style={{padding:10}}>
-                  <Button className='button' onClick={this.onGenerateChange} disabled={!image}background='green'
+                  <Button className='button' onClick={this.onGenerateChange} disabled={!image || !layer}background='green'
                       appearance="primary" iconAfter="arrow-right">{hasResult?"Try Again":"Get Semantic Dictionary"}</Button>
               </div>
 
@@ -59,7 +79,7 @@ render(){
                                                 })
                                               }}/>
                 {hasResult && <div style={{padding:10}}>
-                                <SemanticDictionary n={this.state.activations}/>
+                                <SemanticDictionary n={this.state.activations} layer={this.state.layer}/>
                               </div>}
               </div>
             </div>
