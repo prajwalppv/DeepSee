@@ -45,12 +45,13 @@ def perturb():
 
     args = flask.request.headers
     widthC, heightC = int(args['widthC']), int(args['heightC'])
-
-    finalImage = getRegionsofInterest('currentImage.png', heightC, widthC)
+    class_names = args['class_names'].split(',')
+    finalImage, region_probs = getRegionsofInterest('currentImage.png', class_names, heightC, widthC)
     finalImage.save('result.jpg')
     results['success'] = True
     results['imagestr'] = convertImage2String('result.jpg')
-
+    results['region_probs'] = region_probs
+    results['origIndex'] = len(region_probs)-1
     return flask.jsonify(results)
 
 

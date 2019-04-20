@@ -38,7 +38,7 @@ def createPerturbedImages(image, numchunksV, numchunksH):
   return perturbedImages, locs, chunksizeH, chunksizeV
 
 
-def getRegionsofInterest(imageLoc, numchunksV, numchunksH):
+def getRegionsofInterest(imageLoc, class_names, numchunksV, numchunksH):
   ###
   # Args: 
   #      model_file - path to the keras model
@@ -59,20 +59,36 @@ def getRegionsofInterest(imageLoc, numchunksV, numchunksH):
 
   K.clear_session()
   model = load_model('./model.h5')
-  correctPrediction = model.predict(inp)[0][0]
 
+  origOutput = model.predict(inp)[0]
+  softPreds = softmax(origOutput*1000)
+  origPred = np.argmax(softPreds)
+  origSoft = softPreds[origPred]
+  
+  if len(class_names) != len(origOutput):
+    raise Exception()
+  
   perturbedImages = np.stack(perturbedImages, axis=0)
-  perturbedPreds = model.predict_on_batch(perturbedImages).squeeze()
-  K.clear_session()
+  perturbedPreds = model.predict_on_batch(perturbedImages)
 
   regionsOfInterest = []
+  allRegionProbs = []
   for prediction, (pv, ph) in zip(perturbedPreds, positions):
-    if abs(correctPrediction-prediction) > 0.3 and prediction != 0:
+    prediction = softmax(prediction*1000)
+    curPred = np.argmax(prediction)
+    confid_diff = abs(prediction[origPred] - origSoft)
+    if origPred != curPred or confid_diff > 0.1:
       regionsOfInterest.append((pv, pv+vrun, ph, ph+hrun))
+      
+    regionProbs = {disease:prob for disease,prob in zip(class_names, prediction)}
+    allRegionProbs.append(regionProbs)
+  
+  origRegionProbs = {disease:prob for disease,prob in zip(class_names, softPreds)}
+  allRegionProbs.append(origRegionProbs)
 
-  finalImage = originalImage.copy()
+  finalImage = image.copy()
   d = ImageDraw.Draw(finalImage)
   for (y0, y1, x0, x1)  in regionsOfInterest:
     d.rectangle((x0, y0, x1, y1), outline='red')
 
-  return finalImage
+  return finalImage, allRegionProbs
