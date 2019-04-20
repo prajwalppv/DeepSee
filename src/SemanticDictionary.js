@@ -4,15 +4,16 @@ import './SemanticDictionary.css';
 import LoadingOverlay from 'react-loading-overlay';
 import { Button, TextInputField } from 'evergreen-ui'
 import ImageMapper from 'react-image-mapper';
-import ReactHtmlParser, {processNodes, convertNodeToElement, htmlparser2} from 'react-html-parser'
 import bg from "./img/activation.jpeg"
 
-class SemacticDictonary extends Component{
 
-    state = {hoveredArea:null,subImages:null}
+
+class SemanticDictionary extends Component{
+
+    state = {hoveredArea:null, activations:this.props.n};
     n = 14
     size = 500
-    URL = "./img/wordcloud.png"
+    URL = "./server_lucid/currentImage.png"
     MAP = {
       name: "my-map",
       areas: this.generateAreas(this.n,this.size)
@@ -48,7 +49,6 @@ class SemacticDictonary extends Component{
 
     enterArea(area) {
         this.setState({ hoveredArea: area });
-        console.log("here")
     }
 
     leaveArea(area) {
@@ -58,20 +58,20 @@ class SemacticDictonary extends Component{
     getTipPosition(area) {
         let subImg = [];
         this.setState({ hoveredArea: area });
-        console.log(this.state.hoveredArea)
-        let ns = [Math.floor((Math.random() * 100) + 1),Math.floor((Math.random() * 100) + 1),Math.floor((Math.random() * 100) + 1),Math.floor((Math.random() * 100) + 1)];
+
+        let row = Math.floor(area.n/14)
+        let col = area.n%14
+        let ns = this.state.activations[row][col]
+        console.log(ns)
         let src = 'img/activation.jpeg'
         let sprite_n_wrap = 14;
         let sprite_size= 88;
 
         for (let i=0;i<4;i++){
-            let a = -sprite_size*(ns[i]%sprite_n_wrap)
-            let b = -sprite_size*Math.floor(ns[i]/sprite_n_wrap)
-
-            console.log(ns[i])
+            let a = -sprite_size*(ns[i]['n']%sprite_n_wrap)
+            let b = -sprite_size*Math.floor(ns[i]['n']/sprite_n_wrap)
             subImg.push(<div key={i} style={{backgroundImage: 'url('+ bg+')',width:'88px',height:'88px',float:'left',margin:'15px',backgroundPosition:`${a}px ${b}px`}}></div>)
         }
-        console.log(subImg);
         this.setState({subImages:subImg})
 
 
@@ -83,7 +83,7 @@ render(){
     return(
     <div className="container">
     {console.log(this.state)}
-        <ImageMapper src={require('./img/chest-xray.jpg')} map={this.MAP} width={500} height={500}
+        <ImageMapper src={require('./server_lucid/currentImage.png')} map={this.MAP} width={500} height={500}
         onMouseEnter = {area =>this.getTipPosition(area)}
         onMouseLeave = {area => this.leaveArea(area)}
         onClick={area => this.getTipPosition(area)}
@@ -100,15 +100,5 @@ render(){
 
 }
 
-/*class SemacticDictonary extends Component{
 
-
-    render(){
-        return (
-            <div w3-include-html="sem_dict.html"></div>
-    );
-    }
-
-}*/
-
-export default SemacticDictonary;
+export default SemanticDictionary;
