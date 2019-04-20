@@ -1,7 +1,7 @@
 import flask
 from flask_cors import CORS, cross_origin
 import base64
-
+from flask import request
 from semanticDict import googlenet_semantic_dict
 
 
@@ -23,9 +23,11 @@ def uploadImage():
 @app.route("/semanticDictionary", methods=['POST'])
 @cross_origin()
 def semanticDictionary():
+    layer = flask.request.form['layer']
     results = {'success': False}
+    print(layer)
 
-    results['activations'] = googlenet_semantic_dict('conv4_block1_concat/concat', "currentImage.png")
+    results['activations'] = googlenet_semantic_dict(layer, "currentImage.png")
 
     results['success'] = True
 
