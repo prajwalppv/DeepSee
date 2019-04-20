@@ -51,9 +51,9 @@ def getRegionsofInterest(imageLoc, numchunksV, numchunksH):
   #                        [vert position, vert run, horiz position, horiz run]
   ###
   
-  originalImage = Image.open(imageLoc).resize((256,256))
+  originalImage = Image.open(imageLoc).resize((224,224))
   originalImage = originalImage.convert('RGB')
-  image = np.array(originalImage)
+  image = np.array(originalImage) / 255.
   perturbedImages, positions, hrun, vrun = createPerturbedImages(image, numchunksV, numchunksH)
   inp = np.expand_dims(image, axis=0)
 
