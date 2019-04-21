@@ -1,9 +1,10 @@
-
 import keras
+import numpy as np
+
 from keras import backend as K
 from keras.models import load_model
 from PIL import Image, ImageDraw
-import numpy as np
+from scipy.special import softmax
 
 
 def createPerturbedImages(image, numchunksV, numchunksH):
@@ -25,9 +26,9 @@ def createPerturbedImages(image, numchunksV, numchunksH):
   perturbedImages = []
   locs = []
   v = 0
-  while v < vert:
+  while v < chunksizeV*numchunksV:
     h = 0
-    while h < horiz:
+    while h < chunksizeH*numchunksH:
       newImage = image.copy()
       newImage[v:v+chunksizeV, h:h+chunksizeH, :] = 0
       perturbedImages.append(newImage)
@@ -53,9 +54,9 @@ def getRegionsofInterest(imageLoc, class_names, numchunksV, numchunksH):
   
   originalImage = Image.open(imageLoc).resize((224,224))
   originalImage = originalImage.convert('RGB')
-  image = np.array(originalImage) / 255.
-  perturbedImages, positions, hrun, vrun = createPerturbedImages(image, numchunksV, numchunksH)
-  inp = np.expand_dims(image, axis=0)
+  inp = np.array(originalImage) / 255.
+  perturbedImages, positions, hrun, vrun = createPerturbedImages(inp, numchunksV, numchunksH)
+  inp = np.expand_dims(inp, axis=0)
 
   K.clear_session()
   model = load_model('./model.h5')
@@ -80,13 +81,13 @@ def getRegionsofInterest(imageLoc, class_names, numchunksV, numchunksH):
     if origPred != curPred or confid_diff > 0.1:
       regionsOfInterest.append((pv, pv+vrun, ph, ph+hrun))
       
-    regionProbs = {disease:prob for disease,prob in zip(class_names, prediction)}
+    regionProbs = {disease:float(prob) for disease,prob in zip(class_names, prediction)}
     allRegionProbs.append(regionProbs)
   
-  origRegionProbs = {disease:prob for disease,prob in zip(class_names, softPreds)}
+  origRegionProbs = {disease:float(prob) for disease,prob in zip(class_names, softPreds)}
   allRegionProbs.append(origRegionProbs)
 
-  finalImage = image.copy()
+  finalImage = originalImage.copy()
   d = ImageDraw.Draw(finalImage)
   for (y0, y1, x0, x1)  in regionsOfInterest:
     d.rectangle((x0, y0, x1, y1), outline='red')

@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import UploadButton from './Button';
 import './ImagePertubation.css';
 import LoadingOverlay from 'react-loading-overlay';
+import ImageMapper from 'react-image-mapper';
 import { Button, TextInputField } from 'evergreen-ui'
-// import {CanvasJS.CanvasJSChart} from 'canvasjs'
 import CanvasJSReact from './canvasjs.react'
 
-// var CanvasJSReact = require('./canvasjs.react');
-// var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const default_classes = 'Atelectasis,Cardiomegaly,Effusion,Infiltration,Mass,Nodule,Pneumonia,Pneumothorax,Consolidation,Edema,Emphysema,Fibrosis,Pleural_Thickening,Hernia'
 
@@ -15,8 +13,39 @@ class ImagePertubation extends Component {
   
   state = {loading:false, image:false, class_names:default_classes, 
             widthC:3, heightC:3, model:false,
-            hasResult:false, result:null, region_probs:null, curArea:0}
+            hasResult:false, result:null, region_probs:null, 
+            toggleArea:true, curArea:-1}
   
+
+  generateAreas() {
+    const {widthC, heightC} = this.state
+    let areas = []
+    let index = 0
+    for(let row=0;row<widthC;row++){
+      for(let col=0;col<heightC;col++){
+        let obj = {};
+        obj.n = index.toString();
+        obj.shape = 'poly';
+        obj.coords = this.getCoordinates(col,row,widthC,heightC)
+        index++;
+        areas.push(obj)
+      }
+    }
+    return {name: 'map',
+            areas: areas}
+  }
+
+  getCoordinates(row,col, numC, numR) {
+    let coords = []
+    let colOffset = Math.trunc(224/numC)
+    let rowOffset = Math.trunc(224/numR)
+    coords.push(row*rowOffset,col*colOffset)
+    coords.push((row+1)*rowOffset, col*colOffset)
+    coords.push((row+1)*rowOffset, (col+1)*colOffset)
+    coords.push(row*rowOffset,(col+1)*colOffset)
+
+    return coords
+  }
 
   onImageChange = e => {
     const file = e[0]
@@ -59,15 +88,11 @@ class ImagePertubation extends Component {
     const {curArea, region_probs} = this.state
 
     const classes = this.state.class_names.split(',')
-    if (curArea == -1) {
-      curArea = region_probs.length-1
-    }
     
     const data = []
-    // region_probs[curArea][x]
-    classes.map(x => data.push({y:10, 
+    classes.map(x => data.push({y:region_probs[curArea][x]*100, 
                                 label:x}))
-    console.log('here')
+
     const Chartoptions = {
 			animationEnabled: true,
 			theme: "light2",
@@ -78,19 +103,22 @@ class ImagePertubation extends Component {
         title: "Disease",
         reversed: true,
         labelFontSize: 10,
+        labelAngle:135,
         interval:1,
 			},
 			axisY: {
-				labelFormatter: this.addSymbols
+        title: 'Probability',
+        maximum: 100,
+        minimum: 0
+        
 			},
 			data: [{
-				type: "bar",
+				type: "column",
 				dataPoints: data
 			}]
     }
     return Chartoptions
   }
-
 
   onGenerateChange = e => {
     this.setState({hasResult:false, loading:true})
@@ -113,12 +141,36 @@ class ImagePertubation extends Component {
         })
         .catch(e => console.error(e))
   }
+
+  enterArea = area => {
+    const {toggleArea} = this.state
+    if (toggleArea) {
+      this.setState({curArea:area.n})
+    }
+  }
+
+  leaveArea = area => {
+    const {toggleArea} = this.state
+    if (toggleArea) {
+      this.setState({curArea:this.state.region_probs.length-1})
+    }
+  }
+
+  clickArea = area => {
+    const {curArea, toggleArea} = this.state
+    if (toggleArea == false && curArea == area.n) {
+      this.setState({toggleArea:true})
+    } else {
+      this.setState({toggleArea:false, curArea:area.n})
+    }
+  }
+
   
   
   render() {
     const {loading, hasResult, image, model} = this.state
     const content = () => {
-    return <div>
+    return <div className='wrapper'>
               <div style={{display: "inline-block", padding:20, marginBottom:0}}>
                 <UploadButton onChange={this.onModelChange} name='Model'/>
                 <div>
@@ -141,23 +193,33 @@ class ImagePertubation extends Component {
                                   onChange={this.updateClassNames} style={{label_color:'red'}}/>
               </div>
               <div>
-                  <Button className='button' onClick={this.onGenerateChange} disabled={!image || !model}background='green' 
+                  {/* <Button className='button' onClick={this.onGenerateChange} disabled={!image || !model} background='green' 
+                      appearance="primary" iconAfter="arrow-right">{hasResult?"Try Again":"Find Areas of Interest"}</Button> */}
+                  <Button className='button' onClick={this.onGenerateChange} background='green' 
                       appearance="primary" iconAfter="arrow-right">{hasResult?"Try Again":"Find Areas of Interest"}</Button>
               </div>
 
-              <div style={{padding:50}}>
+              <div style={{marginTop:50}}>
                 <LoadingOverlay active={loading} spinner text='Loading Visualization' styles={{
                                                 overlay: (base) => ({
                                                   ...base,
                                                   background: 'rgba(100, 100, 100, 1)'
                                                 })
                                               }}/>
-                {hasResult && <div styles={{"padding-top":50}}>
-                            <img style={{display:"inline-block"}} src={"data:image/png;base64," + this.state.result}/>
-                            {/* <CanvasJSChart style={{display:"inline-block"}} options={Chartoptions}/> */}
-                          </div>}
-                <CanvasJSChart options={this.getChartOptions()}/>
+                {hasResult && <div>
+                                <div style={{display: "inline-block", float:'left'}}>
+                                  <ImageMapper src={"data:image/png;base64," + this.state.result} map={this.generateAreas()}
+                                            onMouseEnter = {area => this.enterArea(area)}
+                                            onMouseLeave = {area => this.leaveArea()}
+                                            onClick= {area => this.clickArea(area)}
+                                  />
+                                </div>
+                                <div style={{display: "inline-block", width:'66%'}}>
+                                  <CanvasJSChart options={this.getChartOptions()}/>
+                                </div>
+                              </div>}
               </div>
+              
             </div>
     }
 

@@ -46,7 +46,6 @@ class SemanticDictionary extends Component{
       return areas
     }
 
-
     enterArea(area) {
         this.setState({ hoveredArea: area });
     }
@@ -84,12 +83,10 @@ render(){
     <div className="container">
     {console.log(this.state)}
         <ImageMapper src={require('./server_lucid/currentImage.png')} map={this.MAP} width={500} height={500}
-        onMouseEnter = {area =>this.getTipPosition(area)}
-        onMouseLeave = {area => this.leaveArea(area)}
-        onClick={area => this.getTipPosition(area)}
-
-
-    	/>
+                  onMouseEnter = {area =>this.getTipPosition(area)}
+                  onMouseLeave = {area => this.leaveArea(area)}
+                  onClick={area => this.getTipPosition(area)}
+      	/>
 
         {this.state.subImages!==null? <div className="dict" > {this.state.subImages}</div>  : <div>Hover over an area on the image to see activations</div>}
 
