@@ -10,7 +10,7 @@ import bg from "./img/activation.jpeg"
 
 class SemanticDictionary extends Component{
 
-    state = {hoveredArea:null, activations:this.props.n};
+    state = {hoveredArea:null, activations:this.props.n, layer:this.props.layer};
     n = 14
     size = 500
     URL = "./server_lucid/currentImage.png"
@@ -75,8 +75,6 @@ class SemanticDictionary extends Component{
 
 
     }
-
-
 
 render(){
     return(
