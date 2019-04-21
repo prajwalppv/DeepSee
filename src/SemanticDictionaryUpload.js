@@ -24,12 +24,14 @@ state = {loading:false, image:false,
   }
 
   onGenerateChange = e => {
+
+    if (this.state.layer == null || this.state.layer==='def'){
+        toaster.danger("Choose a valid layer to visualize");
+        return
+        }
+
     this.setState({hasResult:false, loading:true, activations:null})
     const data = new FormData()
-    if (this.state.layer == null){
-        toaster.danger("Choose a valid layer to visualize")
-        }
-    console.log(this.state.layer)
     data.append('layer', this.state.layer)
 
     fetch(`http://127.0.0.1:5000/semanticDictionary`, {
@@ -60,14 +62,15 @@ render(){
                 <UploadButton onChange={this.onImageChange} name='Image'/>
               </div>
               <div style={{display: "inline-block", padding:20}}>
-                <Heading size={600} color='white'> Choose a layer </Heading>
+                <Heading size={600} color='white'> Choose a layer to visualize </Heading>
                 <Select  width={240} onChange={event=> this.onSelectChange(event)}>
+                  <option value='def'>Choose a layer...</option>
                   <option value="conv4_block1_concat/concat">Conv4_block1_concat/concat</option>
                   <option value="bar">Bar</option>
                 </Select>
               </div>
               <div style={{padding:10}}>
-                  <Button className='button' onClick={this.onGenerateChange} disabled={!image || !layer}background='green'
+                  <Button className='button' onClick={this.onGenerateChange} disabled={!image}background='green'
                       appearance="primary" iconAfter="arrow-right">{hasResult?"Try Again":"Get Semantic Dictionary"}</Button>
               </div>
 
