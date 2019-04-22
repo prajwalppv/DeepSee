@@ -4,3 +4,4 @@ node_modules
 *.png
 *.h5
 src/server/currentImage
+__pycache__
