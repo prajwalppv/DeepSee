@@ -17,7 +17,7 @@ state = {loading:false, image:false,
     const data = new FormData()
     data.append('image', file)
 
-    fetch(`http://127.0.0.1:5000/uploadImage`, {
+    fetch(`http://localhost:8000/uploadImage`, {
           method: ['POST'],
           body: data
       }).then(this.setState({image:true}))
@@ -29,7 +29,7 @@ state = {loading:false, image:false,
     const data = new FormData()
     data.append('model', file)
 
-    fetch(`http://127.0.0.1:5000/uploadModel`, {
+    fetch(`http://localhost:8000/uploadModel`, {
           method: ['POST'],
           body: data
       }).then(this.setState({model:true}))
@@ -48,7 +48,7 @@ state = {loading:false, image:false,
     data.append('layer', this.state.layer)
     data.append('group', this.state.group)
 
-    fetch(`http://127.0.0.1:5000/neuronGroups`, {
+    fetch(`http://localhost:8000/neuronGroups`, {
           method: ['POST'],
           timeout: 2000,
           body:data
@@ -85,7 +85,7 @@ render(){
               <div style={{display: "inline-block", padding:20}}>
                 <Heading size={600} color='white'> Choose a layer </Heading>
                 <Select name="layer" width={240} onChange={event=> this.onSelectChange(event)}>
-                  <option value=""></option>
+                  <option value="">Choose a layer...</option>
                   <option value="conv2_block1_concat/concat">Conv2 Block1</option>
                   <option value="conv3_block1_concat/concat">Conv3 Block1</option>
                   <option value="conv4_block1_concat/concat">Conv4 Block1</option>
@@ -96,7 +96,7 @@ render(){
               <div style={{display: "inline-block", padding:20}}>
                 <Heading size={600} color='white'> Choose number of groups </Heading>
                 <Select name="group" width={240} onChange={event=> this.onSelectChange(event)}>
-                  <option value=""></option>
+                  <option value="">Choose a number...</option>
                   <option value="5">5</option>
                   <option value="6">6</option>
                   <option value="7">7</option>
@@ -124,7 +124,6 @@ render(){
               </div>
             </div>
     }
-
     return (
       <div className="App">
         <header className="App-header">
