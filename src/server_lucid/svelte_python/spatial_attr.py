@@ -12,20 +12,18 @@ from lucid.modelzoo.vision_base import Model
 from lucid_svelte import generate_html
 
 class chestnet(Model):
-  model_path = 'tf_chestxnet_frozen.pb'
+  model_path = 'model.pb'
   image_shape = [None, None, 3]
   image_value_range = (-1, 1)
   input_name = 'input_1'
 
-model = chestnet()
-model.load_graphdef()
 
 labels = ['dummy','Atelectasis', 'Consolidation', 'Infiltration', 'Pneumothorax', 'Edema',
            'Emphysema', 'Fibrosis', 'Effusion', 'Pneumonia', 'Pleural_thickening',
           'Cardiomegaly', 'Nodule', 'Mass', 'Hernia']
 
 
-def raw_class_spatial_attr(img, layer, label, override=None):
+def raw_class_spatial_attr(model, img, layer, label, override=None):
     """How much did spatial positions at a given layer effect a output class?"""
 
     # Set up a graph for doing attribution...
@@ -47,7 +45,7 @@ def raw_class_spatial_attr(img, layer, label, override=None):
         return np.sum(acts * grad, -1)[0]
 
 
-def raw_spatial_spatial_attr(img, layer1, layer2, override=None):
+def raw_spatial_spatial_attr(model, img, layer1, layer2, override=None):
     """Attribution between spatial positions in two different layers."""
 
     # Set up a graph for doing attribution...
@@ -91,19 +89,19 @@ def image_url_grid(grid):
     return [[_image_url(img) for img in line] for line in grid]
 
 
-def spatial_spatial_attr(img, layer1, layer2, hint_label_1=None, hint_label_2=None, override=None):
+def spatial_spatial_attr(model, img, layer1, layer2, hint_label_1=None, hint_label_2=None, override=None):
     hint1 = orange_blue(
-        raw_class_spatial_attr(img, layer1, hint_label_1, override=override),
-        raw_class_spatial_attr(img, layer1, hint_label_2, override=override),
+        raw_class_spatial_attr(model, img, layer1, hint_label_1, override=override),
+        raw_class_spatial_attr(model, img, layer1, hint_label_2, override=override),
         clip=True
     )
     hint2 = orange_blue(
-        raw_class_spatial_attr(img, layer2, hint_label_1, override=override),
-        raw_class_spatial_attr(img, layer2, hint_label_2, override=override),
+        raw_class_spatial_attr(model, img, layer2, hint_label_1, override=override),
+        raw_class_spatial_attr(model, img, layer2, hint_label_2, override=override),
         clip=True
     )
 
-    attrs = raw_spatial_spatial_attr(img, layer1, layer2, override=override)
+    attrs = raw_spatial_spatial_attr(model, img, layer1, layer2, override=override)
     attrs = attrs / attrs.max()
 
     data = {
@@ -120,15 +118,14 @@ def spatial_spatial_attr(img, layer1, layer2, hint_label_1=None, hint_label_2=No
     generate_html('spatial_attr', data)
 
 def callSpatialAttr(imageName, layer1, layer2):
-    # img = load("https://i.imgur.com/Z7xW5iy.jpg")
-    #
-    # spatial_spatial_attr(img, "conv4_block1_concat/concat", "conv5_block1_concat/concat", hint_label_1="Atelectasis",
-    #                      hint_label_2="Consolidation")
+    model = chestnet()
+    model.load_graphdef()
     img = load(imageName)
-    spatial_spatial_attr(img, layer1, layer2, hint_label_1="Atelectasis", hint_label_2="Consolidation")
+    spatial_spatial_attr(model, img, layer1, layer2, hint_label_1="Atelectasis", hint_label_2="Consolidation")
 
 if __name__=="__main__":
+    model = chestnet()
+    model.load_graphdef()
     img = load("https://i.imgur.com/Z7xW5iy.jpg")
-
-    spatial_spatial_attr(img, "conv4_block1_concat/concat", "conv5_block1_concat/concat", hint_label_1="Atelectasis",
+    spatial_spatial_attr(model, img, "conv4_block1_concat/concat", "conv5_block1_concat/concat", hint_label_1="Atelectasis",
                          hint_label_2="Consolidation")
