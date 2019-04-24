@@ -23,6 +23,18 @@ state = {loading:false, image:false,
       }).then(this.setState({image:true}))
   }
 
+  onModelChange = e => {
+    const file = e[0]
+
+    const data = new FormData()
+    data.append('model', file)
+
+    fetch(`http://127.0.0.1:5000/uploadModel`, {
+          method: ['POST'],
+          body: data
+      }).then(this.setState({model:true}))
+  }
+
   onGenerateChange = e => {
     this.setState({hasResult:false, loading:true, activations:null})
     const data = new FormData()
@@ -58,15 +70,19 @@ state = {loading:false, image:false,
 
 
 render(){
-    const {loading, hasResult, image, layer1, layer2} = this.state
+    const {loading, hasResult, image, model, layer1, layer2} = this.state
     const content = () => {
     return <div>
               <div style={{display: "inline-block", padding:20}}>
                 <UploadButton onChange={this.onImageChange} name='Image'/>
               </div>
               <div style={{display: "inline-block", padding:20}}>
+                <UploadButton onChange={this.onModelChange} name='Model'/>
+              </div>
+              <div style={{display: "inline-block", padding:20}}>
                 <Heading size={700} color='white' padding={20}> Choose layer1 </Heading>
                 <Select name="layer1" width={240} onChange={event=> this.onSelectChange(event)}>
+                  <option value=""></option>
                   <option value="conv2_block1_concat/concat">Conv2 Block1</option>
                   <option value="conv3_block1_concat/concat">Conv3 Block1</option>
                   <option value="conv4_block1_concat/concat">Conv4 Block1</option>
@@ -77,6 +93,7 @@ render(){
               <div style={{display: "inline-block", padding:20}}>
                 <Heading size={700} color='white' padding={20}> Choose layer2 </Heading>
                 <Select name="layer2" width={240} onChange={event=> this.onSelectChange(event)}>
+                  <option value=""></option>
                   <option value="conv2_block1_concat/concat">Conv2 Block1</option>
                   <option value="conv3_block1_concat/concat">Conv3 Block1</option>
                   <option value="conv4_block1_concat/concat">Conv4 Block1</option>
@@ -85,7 +102,7 @@ render(){
               </div>
 
               <div style={{padding:10}}>
-                  <Button className='button' onClick={this.onGenerateChange} disabled={!image || !layer1 || !layer2}background='green'
+                  <Button className='button' onClick={this.onGenerateChange} disabled={!image || !model || !layer1 || !layer2}background='green'
                       appearance="primary" iconAfter="arrow-right">{hasResult?"Try Again":"Get Spatial Attribution"}</Button>
               </div>
 
