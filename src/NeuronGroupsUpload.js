@@ -23,11 +23,26 @@ state = {loading:false, image:false,
       }).then(this.setState({image:true}))
   }
 
+  onModelChange = e => {
+    const file = e[0]
+
+    const data = new FormData()
+    data.append('model', file)
+
+    fetch(`http://127.0.0.1:5000/uploadModel`, {
+          method: ['POST'],
+          body: data
+      }).then(this.setState({model:true}))
+  }
+
   onGenerateChange = e => {
     this.setState({hasResult:false, loading:true, activations:null})
     const data = new FormData()
     if (this.state.layer == null){
         toaster.danger("Choose a valid layer to visualize")
+        }
+    if (this.state.group == null){
+        toaster.danger("Choose a valid group to visualize")
         }
     console.log(this.state.layer)
     data.append('layer', this.state.layer)
@@ -48,24 +63,29 @@ state = {loading:false, image:false,
 
   }
 
-
-
   onSelectChange = e =>{
+    console.log([e.target.value])
     this.setState({[e.target.name] :e.target.value})
   }
 
 
 render(){
-    const {loading, hasResult, image, layer} = this.state
+    const {loading, hasResult, image, model, layer, group} = this.state
     const content = () => {
     return <div>
 
               <div style={{display: "inline-block", padding:20}}>
                 <UploadButton onChange={this.onImageChange} name='Image'/>
               </div>
+
+              <div style={{display: "inline-block", padding:20}}>
+                <UploadButton onChange={this.onModelChange} name='Model'/>
+              </div>
+
               <div style={{display: "inline-block", padding:20}}>
                 <Heading size={600} color='white'> Choose a layer </Heading>
                 <Select name="layer" width={240} onChange={event=> this.onSelectChange(event)}>
+                  <option value=""></option>
                   <option value="conv2_block1_concat/concat">Conv2 Block1</option>
                   <option value="conv3_block1_concat/concat">Conv3 Block1</option>
                   <option value="conv4_block1_concat/concat">Conv4 Block1</option>
@@ -76,6 +96,7 @@ render(){
               <div style={{display: "inline-block", padding:20}}>
                 <Heading size={600} color='white'> Choose number of groups </Heading>
                 <Select name="group" width={240} onChange={event=> this.onSelectChange(event)}>
+                  <option value=""></option>
                   <option value="5">5</option>
                   <option value="6">6</option>
                   <option value="7">7</option>
@@ -86,7 +107,7 @@ render(){
               </div>
 
               <div style={{padding:10}}>
-                  <Button className='button' onClick={this.onGenerateChange} disabled={!image || !layer}background='green'
+                  <Button className='button' onClick={this.onGenerateChange} disabled={!image || !model || !layer || !group}background='green'
                       appearance="primary" iconAfter="arrow-right">{hasResult?"Try Again":"Get Neuron Groups"}</Button>
               </div>
 
