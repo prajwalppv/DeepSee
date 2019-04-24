@@ -17,7 +17,7 @@ state = {loading:false, image:false,
     const data = new FormData()
     data.append('image', file)
 
-    fetch(`http://127.0.0.1:5000/uploadImage`, {
+    fetch(`http://localhost:8000/uploadImage`, {
           method: ['POST'],
           body: data
       }).then(this.setState({image:true}))
@@ -34,7 +34,7 @@ state = {loading:false, image:false,
     const data = new FormData()
     data.append('layer', this.state.layer)
 
-    fetch(`http://127.0.0.1:5000/semanticDictionary`, {
+    fetch(`http://localhost:8000/semanticDictionary`, {
           method: ['POST'],
           timeout: 2000,
           body:data
@@ -64,9 +64,11 @@ render(){
               <div style={{display: "inline-block", padding:20}}>
                 <Heading size={700} color='white' padding={20}> Choose a layer to visualize </Heading>
                 <Select  width={240} onChange={event=> this.onSelectChange(event)}>
-                  <option value='def'>Choose a layer...</option>
-                  <option value="conv4_block1_concat/concat">Conv4_block1_concat/concat</option>
-                  <option value="bar">Bar</option>
+                  <option value="">Choose a layer...</option>
+                  <option value="conv4_block1_concat/concat">Conv2 Block1</option>
+                  <option value="conv4_block1_concat/concat">Conv3 Block1</option>
+                  <option value="conv4_block1_concat/concat">Conv4 Block1</option>
+                  <option value="conv4_block1_concat/concat">Conv5 Block1</option>
                 </Select>
               </div>
               <div style={{padding:10}}>
