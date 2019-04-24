@@ -62,7 +62,7 @@ render(){
                 <UploadButton onChange={this.onImageChange} name='Image'/>
               </div>
               <div style={{display: "inline-block", padding:20}}>
-                <Heading size={600} color='white'> Choose a layer to visualize </Heading>
+                <Heading size={700} color='white' padding={20}> Choose a layer to visualize </Heading>
                 <Select  width={240} onChange={event=> this.onSelectChange(event)}>
                   <option value='def'>Choose a layer...</option>
                   <option value="conv4_block1_concat/concat">Conv4_block1_concat/concat</option>

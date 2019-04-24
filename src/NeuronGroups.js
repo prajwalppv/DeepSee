@@ -16,6 +16,15 @@ render(){
             display="initial"
             position="relative"/>
             );
+
+//    <Iframe url="http://localhost:3000/neuron_group.html"
+//            width="500px"
+//            height="350px"
+//            id="myId"
+//            className="myClassname"
+//            display="initial"
+//            position="relative"/>
+//            );
     }
 }
 export default NeuronGroups;
