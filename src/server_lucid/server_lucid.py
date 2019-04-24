@@ -20,6 +20,17 @@ def uploadImage():
 
     return flask.jsonify(results)
 
+@app.route("/uploadModel", methods=["POST"])
+@cross_origin()
+def uploadModel():
+    results = {'success': False}
+
+    modelFile = flask.request.files['model']
+    modelFile.save('./model.pb')
+
+    results['success'] = True
+    return flask.jsonify(results)
+
 
 @app.route("/semanticDictionary", methods=['POST'])
 @cross_origin()
