@@ -17,7 +17,7 @@ state = {loading:false, image:false,
     const data = new FormData()
     data.append('image', file)
 
-    fetch(`http://127.0.0.1:5000/uploadImage`, {
+    fetch(`http://localhost:8000/uploadImage`, {
           method: ['POST'],
           body: data
       }).then(this.setState({image:true}))
@@ -29,7 +29,7 @@ state = {loading:false, image:false,
     const data = new FormData()
     data.append('model', file)
 
-    fetch(`http://127.0.0.1:5000/uploadModel`, {
+    fetch(`http://localhost:8000/uploadModel`, {
           method: ['POST'],
           body: data
       }).then(this.setState({model:true}))
@@ -49,7 +49,7 @@ state = {loading:false, image:false,
     data.append('layer1', this.state.layer1)
     data.append('layer2', this.state.layer2)
 
-    fetch(`http://127.0.0.1:5000/spatialAttribution`, {
+    fetch(`http://localhost:8000/spatialAttribution`, {
           method: ['POST'],
           timeout: 2000,
           body:data
@@ -82,7 +82,7 @@ render(){
               <div style={{display: "inline-block", padding:20}}>
                 <Heading size={700} color='white' padding={20}> Choose layer1 </Heading>
                 <Select name="layer1" width={240} onChange={event=> this.onSelectChange(event)}>
-                  <option value=""></option>
+                  <option value="">Choose a layer...</option>
                   <option value="conv2_block1_concat/concat">Conv2 Block1</option>
                   <option value="conv3_block1_concat/concat">Conv3 Block1</option>
                   <option value="conv4_block1_concat/concat">Conv4 Block1</option>
@@ -93,7 +93,7 @@ render(){
               <div style={{display: "inline-block", padding:20}}>
                 <Heading size={700} color='white' padding={20}> Choose layer2 </Heading>
                 <Select name="layer2" width={240} onChange={event=> this.onSelectChange(event)}>
-                  <option value=""></option>
+                  <option value="">Choose a layer...</option>
                   <option value="conv2_block1_concat/concat">Conv2 Block1</option>
                   <option value="conv3_block1_concat/concat">Conv3 Block1</option>
                   <option value="conv4_block1_concat/concat">Conv4 Block1</option>
