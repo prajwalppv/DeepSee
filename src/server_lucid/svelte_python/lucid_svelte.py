@@ -5,6 +5,7 @@ import subprocess
 import os.path as osp
 import uuid
 import os
+import time
 
 # js_template = '/Users/vikashanand/Capstone/visualizations/visualization/js/template/sem_dict.html'
 # html_template = '/Users/vikashanand/Capstone/visualizations/visualization/js/html/sem_dict.js'
@@ -53,6 +54,9 @@ def write_html_file(html_data, filename):
 
 def generate_html(viz_type, data):
     files = viz_dict[viz_type]
+    if os.path.isfile(files[2]):
+        os.remove(files[2])
+    time.sleep(2)
     build_svelte(files[0], files[1])
     js_text = get_js_text(files[1])
     html_file = _template.replace("$js", js_text).replace("$data", json.dumps(data)).replace("$name", viz_type)
