@@ -6,20 +6,14 @@ import Iframe from 'react-iframe'
 
 
 class SpatialAttribution extends Component{
+shouldComponentUpdate() {
+ return false;
+}
 render(){
     return(
-//    <Iframe url="https://nervous-yonath-588b40.netlify.com/"
-//            width="1200px"
-//            height="1450px"
-//            id="myId"
-//            className="myClassname"
-//            display="initial"
-//            position="relative"/>
-//            );
-
     <Iframe url="http://localhost:3000/spatial_attr.html"
-            width="1500px"
-            height="350px"
+            width="470px"
+            height="270px"
             id="myId"
             className="myClassname"
             display="initial"
