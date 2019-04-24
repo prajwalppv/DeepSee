@@ -8,13 +8,15 @@ import GuidedBackProp from "./GuidedBackProp"
 import Saliency from "./Saliency"
 import App from "./App";
 import SemDictUpload from "./SemanticDictionaryUpload";
+import NeuronGroups from "./NeuronGroupsUpload";
+import SpatialAttribution from "./SpatialAttributionUpload";
 // import {BrowserRouter as Router,Route}  from 'react-router-dom';
 
 class Visualize extends Component{
     state={
         selectedIndex:0,
-        tabs: ['Image Perturbation','Saliency Maps','Guided BackProp','Channel Activations','Semantic dictionaries'],
-        components: [<ImagePertubation/>,<Saliency/>,<GuidedBackProp/>,<App/>,<SemDictUpload/>],
+        tabs: ['Image Perturbation','Saliency Maps','Guided BackProp','Spatial Attribution','Neuron groups','Semantic dictionaries'],
+        components: [<ImagePertubation/>,<Saliency/>,<GuidedBackProp/>,<SpatialAttribution/>,<NeuronGroups/>,<SemDictUpload/>],
         icons:['home','series-configuration','cloud-upload','help']
     }
 
