@@ -35,7 +35,11 @@ class GuidedBackProp extends Component {
     fetch(uploadModelUrl, {
           method: ['POST'],
           body: data
-      }).then(this.setState({model:true}))
+      }).then(res => {
+        return res.json()
+      }).then(resp => {
+        this.setState({model:true})}
+        )
 
   }
 

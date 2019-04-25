@@ -78,7 +78,6 @@ class ImagePertubation extends Component {
       }).then(res => {
         return res.json()
       }).then(resp => {
-        console.log(resp['success'])
         this.setState({model:true})}
         )
 
