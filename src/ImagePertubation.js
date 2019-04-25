@@ -5,9 +5,16 @@ import LoadingOverlay from 'react-loading-overlay';
 import ImageMapper from 'react-image-mapper';
 import { Button, TextInputField } from 'evergreen-ui'
 import CanvasJSReact from './canvasjs.react'
+import * as values from "./dns"
 
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const default_classes = 'Atelectasis,Cardiomegaly,Effusion,Infiltration,Mass,Nodule,Pneumonia,Pneumothorax,Consolidation,Edema,Emphysema,Fibrosis,Pleural_Thickening,Hernia'
+
+const uploadImageUrl = values.AWSDNS + ":5000/uploadImage"
+const uploadModelUrl = values.AWSDNS + ":5000/uploadModel"
+const perturbUrl = values.AWSDNS + ":5000/perturb"
+
+
 
 class ImagePertubation extends Component {
   
@@ -53,7 +60,7 @@ class ImagePertubation extends Component {
     const data = new FormData()
     data.append('image', file)
 
-    fetch(`http://127.0.0.1:5000/uploadImage`, {
+    fetch(uploadImageUrl, {
           method: ['POST'],
           body: data
       }).then(this.setState({model:true}))
@@ -65,7 +72,7 @@ class ImagePertubation extends Component {
     const data = new FormData()
     data.append('model', file)
 
-    fetch(`http://127.0.0.1:5000/uploadModel`, {
+    fetch(uploadModelUrl, {
           method: ['POST'],
           body: data
       }).then(this.setState({image:true}))
@@ -122,7 +129,7 @@ class ImagePertubation extends Component {
 
   onGenerateChange = e => {
     this.setState({hasResult:false, loading:true})
-    fetch(`http://127.0.0.1:5000/perturb`, {
+    fetch(perturbUrl, {
           method: ['POST'],
           headers: {widthC: this.state.widthC,
                     heightC: this.state.heightC,
@@ -193,10 +200,8 @@ class ImagePertubation extends Component {
                                   onChange={this.updateClassNames} style={{label_color:'red'}}/>
               </div>
               <div>
-                  {/* <Button className='button' onClick={this.onGenerateChange} disabled={!image || !model} background='green' 
-                      appearance="primary" iconAfter="arrow-right">{hasResult?"Try Again":"Find Areas of Interest"}</Button> */}
-                  <Button className='button' onClick={this.onGenerateChange} background='green' 
-                      appearance="primary" iconAfter="arrow-right">{hasResult?"Try Again":"Find Areas of Interest"}</Button>
+                  {<Button className='button' onClick={this.onGenerateChange} disabled={!image || !model} background='green'
+                      appearance="primary" iconAfter="arrow-right">{hasResult?"Try Again":"Find Areas of Interest"}</Button>}
               </div>
 
               <div style={{marginTop:50}}>
