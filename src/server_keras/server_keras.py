@@ -3,6 +3,7 @@ from flask_cors import CORS, cross_origin
 import base64
 from perturbation import getRegionsofInterest
 from gradientVis import get_saliency, get_Guided_backProp
+from multiprocessing import Pool
 
 
 app = flask.Flask(__name__)
@@ -47,7 +48,8 @@ def perturb():
     widthC, heightC = int(args['widthC']), int(args['heightC'])
     class_names = args['class_names'].split(',')
     
-    finalImage, region_probs = getRegionsofInterest('currentImage.png', class_names, heightC, widthC)
+    with Pool(1) as p:
+      finalImage, region_probs = p.apply(getRegionsofInterest, ('currentImage.png', class_names, heightC, widthC))
     finalImage.save('result.jpg')
 
     results['success'] = True
@@ -65,7 +67,8 @@ def saliency():
   grad_fileName = 'result.png'
   smooth_fileName = 'resultSmooth.png'
 
-  get_saliency('currentImage', 'model.h5', grad_fileName, smooth_fileName)
+  with Pool(1) as p:
+    p.apply(get_saliency, ('currentImage', 'model.h5', grad_fileName, smooth_fileName))
 
   results['success'] = True
   results['originalImage'] = convertImage2String('currentImage.png')
@@ -82,7 +85,8 @@ def guidedBP():
   
   result_fileName = 'result.png'
 
-  get_Guided_backProp('currentImage', 'model.h5', result_fileName)
+  with Pool(1) as p:
+    p.apply(get_Guided_backProp, ('currentImage', 'model.h5', result_fileName))
 
   results['success'] = True
   results['originalImage'] = convertImage2String('currentImage.png')
