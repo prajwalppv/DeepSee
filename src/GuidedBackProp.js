@@ -23,7 +23,7 @@ class GuidedBackProp extends Component {
     fetch(uploadImageUrl, {
           method: ['POST'],
           body: data
-      }).then(this.setState({model:true}))
+      }).then(this.setState({image:true}))
   }
 
   onModelChange = e => {
@@ -35,7 +35,7 @@ class GuidedBackProp extends Component {
     fetch(uploadModelUrl, {
           method: ['POST'],
           body: data
-      }).then(this.setState({image:true}))
+      }).then(this.setState({model:true}))
 
   }
 
