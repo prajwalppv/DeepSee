@@ -3,4 +3,5 @@ node_modules
 *.jpg
 *.png
 *.h5
+*.pyc
 src/server/currentImage
