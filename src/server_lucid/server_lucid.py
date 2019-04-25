@@ -43,7 +43,7 @@ def semanticDictionary():
     print(layer)
 
     with closing(Pool(1)) as p:
-      results['activations'] = p.apply_async(googlenet_semantic_dict, (layer, "currentImage.png"))
+      results['activations'] = p.apply(googlenet_semantic_dict, (layer, "currentImage.png"))
       p.terminate()
 
     results['success'] = True
@@ -58,7 +58,7 @@ def neuronGroups():
     results = {'success':False}
 
     with closing(Pool(1)) as p:
-      p.apply_async(callNeuronGroups, ("currentImage.png", str(layer), int(group)))
+      p.apply(callNeuronGroups, ("currentImage.png", str(layer), int(group)))
       p.terminate()
 
     results['success'] = True
@@ -73,7 +73,7 @@ def spatialAttribution():
     print(layer1, type(layer1), str(layer2), type(layer2))
 
     with closing(Pool(1)) as p:
-      p.apply_async(callSpatialAttr, ("currentImage.png", str(layer1), str(layer2)))
+      p.apply(callSpatialAttr, ("currentImage.png", str(layer1), str(layer2)))
       p.terminate()
 
     results['success'] = True
