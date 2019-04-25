@@ -7,6 +7,7 @@ import os
 from svelte_python.neuron_groups import callNeuronGroups
 from svelte_python.spatial_attr import callSpatialAttr
 from multiprocessing import Pool
+from contextlib import closing
 
 app = flask.Flask(__name__)
 
@@ -41,8 +42,9 @@ def semanticDictionary():
     results = {'success': False}
     print(layer)
 
-    with Pool(1) as p:
+    with closing(Pool(1)) as p:
       results['activations'] = p.apply_async(googlenet_semantic_dict, (layer, "currentImage.png"))
+      p.terminate()
 
     results['success'] = True
 
@@ -55,8 +57,9 @@ def neuronGroups():
     group = flask.request.form['group']
     results = {'success':False}
 
-    with Pool(1) as p:
+    with closing(Pool(1)) as p:
       p.apply_async(callNeuronGroups, ("currentImage.png", str(layer), int(group)))
+      p.terminate()
 
     results['success'] = True
     return flask.jsonify(results)
@@ -69,8 +72,9 @@ def spatialAttribution():
     results = {'success':False}
     print(layer1, type(layer1), str(layer2), type(layer2))
 
-    with Pool(1) as p:
+    with closing(Pool(1)) as p:
       p.apply_async(callSpatialAttr, ("currentImage.png", str(layer1), str(layer2)))
+      p.terminate()
 
     results['success'] = True
     return flask.jsonify(results)
