@@ -42,7 +42,7 @@ def semanticDictionary():
     print(layer)
 
     with Pool(1) as p:
-      results['activations'] = p.apply(googlenet_semantic_dict, (layer, "currentImage.png"))
+      results['activations'] = p.apply_async(googlenet_semantic_dict, (layer, "currentImage.png"))
 
     results['success'] = True
 
@@ -56,7 +56,7 @@ def neuronGroups():
     results = {'success':False}
 
     with Pool(1) as p:
-      p.apply(callNeuronGroups, ("currentImage.png", str(layer), int(group)))
+      p.apply_async(callNeuronGroups, ("currentImage.png", str(layer), int(group)))
 
     results['success'] = True
     return flask.jsonify(results)
@@ -70,7 +70,7 @@ def spatialAttribution():
     print(layer1, type(layer1), str(layer2), type(layer2))
 
     with Pool(1) as p:
-      p.apply(callSpatialAttr, ("currentImage.png", str(layer1), str(layer2)))
+      p.apply_async(callSpatialAttr, ("currentImage.png", str(layer1), str(layer2)))
 
     results['success'] = True
     return flask.jsonify(results)
