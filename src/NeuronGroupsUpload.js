@@ -73,7 +73,7 @@ state = {loading:false, image:false,
   }
 
   onSelectChange = e =>{
-    console.log([e.target.value])
+    console.log(e.target.name, e.target.value)
     this.setState({[e.target.name] :e.target.value})
   }
 
@@ -104,7 +104,8 @@ render(){
 
               <div style={{display: "inline-block", padding:20}}>
                 <Heading size={600} color='white'> Choose number of groups </Heading>
-                <Select name="group" width={240} onChange={event=> this.onSelectChange(event)}>
+                <TextInputField name='group' placeholder='3' onChange={this.onSelectChange} style={{label_color:'red'}}/>
+                {/* <Select name="group" width={240} onChange={event=> this.onSelectChange(event)}>
                   <option value="">Choose a number...</option>
                   <option value="5">5</option>
                   <option value="6">6</option>
@@ -112,7 +113,7 @@ render(){
                   <option value="8">8</option>
                   <option value="9">9</option>
                   <option value="10">10</option>
-                </Select>
+                </Select> */}
               </div>
 
               <div style={{padding:10}}>
