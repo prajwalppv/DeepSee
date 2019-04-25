@@ -4,6 +4,11 @@ import './Saliency.css';
 import LoadingOverlay from 'react-loading-overlay';
 import { Button, TextInputField, Select, Heading, toaster } from 'evergreen-ui';
 import SemanticDictionary from './SemanticDictionary';
+import * as values from "./dns"
+
+const uploadImageUrl = values.AWSDNS + ":8000/uploadImage"
+const uploadModelUrl = values.AWSDNS + ":8000/uploadModel"
+const semanticDictionaryUrl = values.AWSDNS + ":8000/semanticDictionary"
 
 class SemDictUpload extends Component {
 state = {loading:false, image:false,
@@ -17,22 +22,24 @@ state = {loading:false, image:false,
     const data = new FormData()
     data.append('image', file)
 
-    fetch(`http://127.0.0.1:5000/uploadImage`, {
+    fetch(uploadImageUrl, {
           method: ['POST'],
           body: data
       }).then(this.setState({image:true}))
   }
 
   onGenerateChange = e => {
+
+    if (this.state.layer == null || this.state.layer==='def'){
+        toaster.danger("Choose a valid layer to visualize");
+        return
+        }
+
     this.setState({hasResult:false, loading:true, activations:null})
     const data = new FormData()
-    if (this.state.layer == null){
-        toaster.danger("Choose a valid layer to visualize")
-        }
-    console.log(this.state.layer)
     data.append('layer', this.state.layer)
 
-    fetch(`http://127.0.0.1:5000/semanticDictionary`, {
+    fetch(semanticDictionaryUrl, {
           method: ['POST'],
           timeout: 2000,
           body:data
@@ -60,14 +67,17 @@ render(){
                 <UploadButton onChange={this.onImageChange} name='Image'/>
               </div>
               <div style={{display: "inline-block", padding:20}}>
-                <Heading size={600} color='white'> Choose a layer </Heading>
+                <Heading size={700} color='white' padding={20}> Choose a layer to visualize </Heading>
                 <Select  width={240} onChange={event=> this.onSelectChange(event)}>
-                  <option value="conv4_block1_concat/concat">Conv4_block1_concat/concat</option>
-                  <option value="bar">Bar</option>
+                  <option value="">Choose a layer...</option>
+                  <option value="conv4_block1_concat/concat">Conv2 Block1</option>
+                  <option value="conv4_block1_concat/concat">Conv3 Block1</option>
+                  <option value="conv4_block1_concat/concat">Conv4 Block1</option>
+                  <option value="conv4_block1_concat/concat">Conv5 Block1</option>
                 </Select>
               </div>
               <div style={{padding:10}}>
-                  <Button className='button' onClick={this.onGenerateChange} disabled={!image || !layer}background='green'
+                  <Button className='button' onClick={this.onGenerateChange} disabled={!image}background='green'
                       appearance="primary" iconAfter="arrow-right">{hasResult?"Try Again":"Get Semantic Dictionary"}</Button>
               </div>
 

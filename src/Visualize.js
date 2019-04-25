@@ -7,14 +7,16 @@ import ImagePertubation from "./ImagePertubation"
 import GuidedBackProp from "./GuidedBackProp"
 import Saliency from "./Saliency"
 import App from "./App";
-import SemanticDictionary from "./SemanticDictionary";
+import SemDictUpload from "./SemanticDictionaryUpload";
+import NeuronGroups from "./NeuronGroupsUpload";
+import SpatialAttribution from "./SpatialAttributionUpload";
 // import {BrowserRouter as Router,Route}  from 'react-router-dom';
 
 class Visualize extends Component{
     state={
         selectedIndex:0,
-        tabs: ['Image Perturbation','Saliency Maps','Guided BackProp','Channel Activations','Semantic dictionaries'],
-        components: [<ImagePertubation/>,<Saliency/>,<GuidedBackProp/>,<App/>,<SemanticDictionary/>],
+        tabs: ['Image Perturbation','Saliency Maps','Guided BackProp','Spatial Attribution','Neuron groups','Semantic dictionaries'],
+        components: [<ImagePertubation/>,<Saliency/>,<GuidedBackProp/>,<SpatialAttribution/>,<NeuronGroups/>,<SemDictUpload/>],
         icons:['home','series-configuration','cloud-upload','help']
     }
 
@@ -23,7 +25,7 @@ class Visualize extends Component{
            <div>
                <Pane display="flex" height={240}>
                     <Tablist marginBottom={16} flexBasis={240} marginRight={10}>
-                        <Pane borderTop borderRight borderLeft borderBottom 
+                        <Pane borderTop borderRight borderLeft borderBottom
                         borer='muted'
                         background='tint1'
                         elevation={1}
@@ -53,7 +55,7 @@ class Visualize extends Component{
                             aria-labelledby={tab}
                             aria-hidden={index !== this.state.selectedIndex}
                             display={index === this.state.selectedIndex ? 'block' : 'none'}
-                        > 
+                        >
                             {this.state.components[index]}
                         </Pane>
                             ))}
