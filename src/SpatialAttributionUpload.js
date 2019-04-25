@@ -4,6 +4,11 @@ import './Saliency.css';
 import LoadingOverlay from 'react-loading-overlay';
 import { Button, TextInputField, Select, Heading, toaster } from 'evergreen-ui';
 import SpatialAttribution from './SpatialAttribution';
+import * as values from "./dns"
+
+const uploadImageUrl = values.AWSDNS + ":8000/uploadImage";
+const uploadModelUrl = values.AWSDNS + ":8000/uploadModel"
+const spatialAttributionUrl = values.AWSDNS + ":8000/spatialAttribution"
 
 class SpatialAttributionUpload extends Component {
 state = {loading:false, image:false,
@@ -17,7 +22,7 @@ state = {loading:false, image:false,
     const data = new FormData()
     data.append('image', file)
 
-    fetch(`http://localhost:8000/uploadImage`, {
+    fetch(uploadImageUrl, {
           method: ['POST'],
           body: data
       }).then(this.setState({image:true}))
@@ -29,7 +34,7 @@ state = {loading:false, image:false,
     const data = new FormData()
     data.append('model', file)
 
-    fetch(`http://localhost:8000/uploadModel`, {
+    fetch(uploadModelUrl, {
           method: ['POST'],
           body: data
       }).then(this.setState({model:true}))
@@ -49,7 +54,7 @@ state = {loading:false, image:false,
     data.append('layer1', this.state.layer1)
     data.append('layer2', this.state.layer2)
 
-    fetch(`http://localhost:8000/spatialAttribution`, {
+    fetch(spatialAttributionUrl, {
           method: ['POST'],
           timeout: 2000,
           body:data

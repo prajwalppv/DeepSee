@@ -4,6 +4,11 @@ import './Saliency.css';
 import LoadingOverlay from 'react-loading-overlay';
 import { Button, TextInputField, Select, Heading, toaster } from 'evergreen-ui';
 import SemanticDictionary from './SemanticDictionary';
+import * as values from "./dns"
+
+const uploadImageUrl = values.AWSDNS + ":8000/uploadImage"
+const uploadModelUrl = values.AWSDNS + ":8000/uploadModel"
+const semanticDictionaryUrl = values.AWSDNS + ":8000/semanticDictionary"
 
 class SemDictUpload extends Component {
 state = {loading:false, image:false,
@@ -17,7 +22,7 @@ state = {loading:false, image:false,
     const data = new FormData()
     data.append('image', file)
 
-    fetch(`http://localhost:8000/uploadImage`, {
+    fetch(uploadImageUrl, {
           method: ['POST'],
           body: data
       }).then(this.setState({image:true}))
@@ -34,7 +39,7 @@ state = {loading:false, image:false,
     const data = new FormData()
     data.append('layer', this.state.layer)
 
-    fetch(`http://localhost:8000/semanticDictionary`, {
+    fetch(semanticDictionaryUrl, {
           method: ['POST'],
           timeout: 2000,
           body:data

@@ -4,6 +4,11 @@ import './Saliency.css';
 import LoadingOverlay from 'react-loading-overlay';
 import { Button, TextInputField, Select, Heading, toaster } from 'evergreen-ui';
 import NeuronGroups from './NeuronGroups';
+import * as values from "./dns"
+
+const uploadImageUrl = values.AWSDNS + ":8000/uploadImage";
+const uploadModelUrl = values.AWSDNS + ":8000/uploadModel"
+const neuronGroupsUrl = values.AWSDNS + ":8000/neuronGroups"
 
 class NeuronGroupsUpload extends Component {
 state = {loading:false, image:false,
@@ -17,7 +22,7 @@ state = {loading:false, image:false,
     const data = new FormData()
     data.append('image', file)
 
-    fetch(`http://localhost:8000/uploadImage`, {
+    fetch(uploadImageUrl, {
           method: ['POST'],
           body: data
       }).then(this.setState({image:true}))
@@ -29,7 +34,7 @@ state = {loading:false, image:false,
     const data = new FormData()
     data.append('model', file)
 
-    fetch(`http://localhost:8000/uploadModel`, {
+    fetch(uploadModelUrl, {
           method: ['POST'],
           body: data
       }).then(this.setState({model:true}))
@@ -48,7 +53,7 @@ state = {loading:false, image:false,
     data.append('layer', this.state.layer)
     data.append('group', this.state.group)
 
-    fetch(`http://localhost:8000/neuronGroups`, {
+    fetch(neuronGroupsUrl, {
           method: ['POST'],
           timeout: 2000,
           body:data

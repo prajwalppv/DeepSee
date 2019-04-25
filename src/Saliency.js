@@ -3,6 +3,11 @@ import UploadButton from './Button';
 import './Saliency.css';
 import LoadingOverlay from 'react-loading-overlay';
 import { Button, TextInputField } from 'evergreen-ui'
+import * as values from "./dns"
+
+const uploadImageUrl = values.AWSDNS + ":5000/uploadImage"
+const uploadModelUrl = values.AWSDNS + ":5000/uploadModel"
+const saliencyUrl = values.AWSDNS + ":5000/saliency"
 
 class Saliency extends Component {
   state = {loading:false, image:false, model:false,
@@ -16,7 +21,7 @@ class Saliency extends Component {
     const data = new FormData()
     data.append('image', file)
 
-    fetch(`http://127.0.0.1:5000/uploadImage`, {
+    fetch(uploadImageUrl, {
           method: ['POST'],
           body: data
       }).then(this.setState({model:true}))
@@ -28,7 +33,7 @@ class Saliency extends Component {
     const data = new FormData()
     data.append('model', file)
 
-    fetch(`http://127.0.0.1:5000/uploadModel`, {
+    fetch(uploadModelUrl, {
           method: ['POST'],
           body: data
       }).then(this.setState({image:true}))
@@ -37,7 +42,7 @@ class Saliency extends Component {
 
   onGenerateChange = e => {
     this.setState({hasResult:false, loading:true})
-    fetch(`http://127.0.0.1:5000/saliency`, {
+    fetch(saliencyUrl, {
           method: ['POST'],
           timeout: 2000
       }).then(res =>{
