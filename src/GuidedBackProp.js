@@ -73,7 +73,7 @@ class GuidedBackProp extends Component {
               </div>
               <div style={{padding:10}}>
                   <Button className='button' onClick={this.onGenerateChange} disabled={!image || !model}background='green' 
-                      appearance="primary" iconAfter="arrow-right">{hasResult?"Try Again":"Get Saliency Images"}</Button>
+                      appearance="primary" iconAfter="arrow-right">{hasResult?"Try Again":"Get Guided BackProp Images"}</Button>
               </div>
 
               <div style={{padding:10}}>

@@ -68,7 +68,7 @@ def saliency():
   smooth_fileName = 'resultSmooth.png'
 
   with Pool(1) as p:
-    p.apply(get_saliency, ('currentImage', 'model.h5', grad_fileName, smooth_fileName))
+    p.apply(get_saliency, ('currentImage.png', 'model.h5', grad_fileName, smooth_fileName))
 
   results['success'] = True
   results['originalImage'] = convertImage2String('currentImage.png')
