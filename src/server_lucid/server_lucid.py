@@ -26,9 +26,11 @@ def uploadImage():
     results = {'success': False}
     uploadedFile = flask.request.files['image']
     uploadedFile.save('currentImage.png')
-    Image.open('currentImage.png').resize((224,224)).save('currentImage.png')
-    results['success'] = True
 
+    Image.open('currentImage.png').resize((224,224)).save('currentImage.png')
+    print(Image.open('currentImage.png').size)
+
+    results['success'] = True
     return flask.jsonify(results)
 
 @app.route("/uploadModel", methods=["POST"])
@@ -65,7 +67,7 @@ def neuronGroups():
     layer = flask.request.form['layer']
     group = flask.request.form['group']
     results = {'success':False}
-    print(Image.open('currentImage.png').shape)
+    print(Image.open('currentImage.png').size)
     with closing(Pool(1)) as p:
       p.apply(callNeuronGroups, ("currentImage.png", str(layer), int(group)))
       p.terminate()
