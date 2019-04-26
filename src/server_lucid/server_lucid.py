@@ -80,7 +80,7 @@ def spatialAttribution():
     layer1 = flask.request.form['layer1']
     layer2 = flask.request.form['layer2']
     results = {'success':False}
-    print(layer1, type(layer1), str(layer2), type(layer2))
+    # print(layer1, type(layer1), str(layer2), type(layer2))
 
     with closing(Pool(1)) as p:
       p.apply(callSpatialAttr, ("currentImage.png", str(layer1), str(layer2)))
