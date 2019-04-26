@@ -10,7 +10,7 @@ import bg from "./img/activation.jpeg"
 
 class SemanticDictionary extends Component{
 
-    state = {hoveredArea:null, activations:this.props.n, layer:this.props.layer};
+    state = {hoveredArea:null, activations:this.props.n, layer:this.props.layer, image:this.props.image};
     n = 14
     size = 500
     URL = "./server_lucid/currentImage.png"
@@ -80,7 +80,7 @@ render(){
     return(
     <div className="container">
     {console.log(this.state)}
-        <ImageMapper src={require('./server_lucid/currentImage.png')} map={this.MAP} width={500} height={500}
+        <ImageMapper src={"data:image/png;base64," + this.state.image} map={this.MAP} width={500} height={500}
                   onMouseEnter = {area =>this.getTipPosition(area)}
                   onMouseLeave = {area => this.leaveArea(area)}
                   onClick={area => this.getTipPosition(area)}

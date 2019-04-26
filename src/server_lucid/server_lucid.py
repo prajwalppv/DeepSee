@@ -12,7 +12,12 @@ from PIL import
 
 app = flask.Flask(__name__)
 
+def convertImage2String(inputFile):
+  with open(inputFile, 'rb') as imageFile:
+      result = base64.b64encode(imageFile.read()).decode('utf-8')
+      return result
 
+      
 @app.route("/uploadImage", methods=["POST"])
 @cross_origin()
 def uploadImage():
@@ -49,6 +54,7 @@ def semanticDictionary():
       results['activations'] = p.apply(googlenet_semantic_dict, (layer, "currentImage.png"))
       p.terminate()
 
+    results['imagestr'] = convertImage2String('result.jpg')
     results['success'] = True
 
     return flask.jsonify(results)

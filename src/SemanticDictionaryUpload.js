@@ -50,7 +50,8 @@ state = {loading:false, image:false, hasResult:false,
               return res.json()
               })
         .then(response => {
-        this.setState({hasResult:true, loading:false, activations:response['activations']});
+        this.setState({hasResult:true, loading:false, image:response['imagestr'],
+                          activations:response['activations']});
         })
         .catch(e => console.error(e))
 
@@ -90,9 +91,9 @@ render(){
                                                   background: 'rgba(100, 100, 100, 1)'
                                                 })
                                               }}/>
-                {/* {hasResult && <div style={{padding:10}}>
-                                <SemanticDictionary n={this.state.activations} layer={this.state.layer}/>
-                              </div>} */}
+                {hasResult && <div style={{padding:10}}>
+                                <SemanticDictionary n={this.state.activations} layer={this.state.layer} image={this.state.image}/>
+                              </div>}
               </div>
             </div>
     }
