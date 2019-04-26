@@ -20,7 +20,9 @@ def uploadImage():
 
     uploadedFile = flask.request.files['image']
 
-    uploadedFile.save('currentImage.png') lts['success'] = True
+    uploadedFile.save('currentImage.png')
+    Image.open('currentImage.png').resize((224,224)).save('currentImage.png')
+    results['success'] = True
 
     return flask.jsonify(results)
 

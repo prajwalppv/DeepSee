@@ -11,8 +11,7 @@ const uploadModelUrl = values.AWSDNS + ":8000/uploadModel"
 const semanticDictionaryUrl = values.AWSDNS + ":8000/semanticDictionary"
 
 class SemDictUpload extends Component {
-state = {loading:false, image:false,
-            widthC:3, heightC:3, hasResult:false,
+state = {loading:false, image:false, hasResult:false,
             originalImage:null, resultGrad:null, resultSmooth:null, layer:null}
 
 
@@ -25,7 +24,11 @@ state = {loading:false, image:false,
     fetch(uploadImageUrl, {
           method: ['POST'],
           body: data
-      }).then(this.setState({image:true}))
+      }).then(res => {
+        return res.json()
+      }).then(res => {
+        this.setState({image:true})}
+        )
   }
 
   onGenerateChange = e => {
@@ -47,8 +50,7 @@ state = {loading:false, image:false,
               return res.json()
               })
         .then(response => {
-        this.setState({hasResult:true, loading:false ,activations:response['activations']});
-        console.log(this.state)
+        this.setState({hasResult:true, loading:false, activations:response['activations']});
         })
         .catch(e => console.error(e))
 
