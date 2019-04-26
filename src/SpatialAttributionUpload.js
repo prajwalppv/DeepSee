@@ -11,7 +11,7 @@ const uploadModelUrl = values.AWSDNS + ":8000/uploadModel"
 const spatialAttributionUrl = values.AWSDNS + ":8000/spatialAttribution"
 
 class SpatialAttributionUpload extends Component {
-state = {loading:false, image:false,
+  state = {loading:false, uploading:false, image:false,
             widthC:3, heightC:3, hasResult:false,
             originalImage:null, resultGrad:null, resultSmooth:null, layer:null}
 
@@ -30,7 +30,7 @@ state = {loading:false, image:false,
 
   onModelChange = e => {
     const file = e[0]
-
+    this.setState({uploading:true})
     const data = new FormData()
     data.append('model', file)
 
@@ -40,7 +40,7 @@ state = {loading:false, image:false,
       }).then(res => {
         return res.json()
       }).then(resp => {
-        this.setState({model:true})}
+        this.setState({model:true, uploading:false})}
         )
   }
 
@@ -79,7 +79,7 @@ state = {loading:false, image:false,
 
 
 render(){
-    const {loading, hasResult, image, model, layer1, layer2} = this.state
+    const {loading, uploading, hasResult, image, model, layer1, layer2} = this.state
     const content = () => {
     return <div>
               <div style={{display: "inline-block", padding:20}}>
@@ -116,6 +116,12 @@ render(){
               </div>
 
               <div style={{padding:10}}>
+                <LoadingOverlay active={uploading} spinner text='Uploading Model' styles={{
+                                                overlay: (base) => ({
+                                                  ...base,
+                                                  background: 'rgba(100, 100, 100, 1)'
+                                                })
+                                              }}/>
                 <LoadingOverlay active={loading} spinner text='Loading Visualization' styles={{
                                                 overlay: (base) => ({
                                                   ...base,

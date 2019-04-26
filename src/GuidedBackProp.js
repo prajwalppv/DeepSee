@@ -10,7 +10,7 @@ const uploadModelUrl = values.AWSDNS + ":5000/uploadModel"
 const guidedBPUrl = values.AWSDNS + ":5000/guidedBP"
 
 class GuidedBackProp extends Component {
-  state = {loading:false, image:false, model:false,
+  state = {loading:false, uploading:false, image:false, model:false,
         hasResult:false, originalImage:null, resultImg:null}
   
 
@@ -27,6 +27,7 @@ class GuidedBackProp extends Component {
   }
 
   onModelChange = e => {
+    this.setState({uploading:true})
     const file = e[0]
 
     const data = new FormData()
@@ -38,7 +39,7 @@ class GuidedBackProp extends Component {
       }).then(res => {
         return res.json()
       }).then(resp => {
-        this.setState({model:true})}
+          this.setState({model:true, uploading:false})}
         )
 
   }
@@ -61,7 +62,7 @@ class GuidedBackProp extends Component {
   }
   
   render() {
-    const {loading, hasResult, image, model} = this.state
+    const {loading, uploading, hasResult, image, model} = this.state
     const content = () => {
     return <div>
               <div style={{display: "inline-block", padding:20}}>
@@ -76,6 +77,12 @@ class GuidedBackProp extends Component {
               </div>
 
               <div style={{padding:10}}>
+                <LoadingOverlay active={uploading} spinner text='Uploading Model' styles={{
+                                                overlay: (base) => ({
+                                                  ...base,
+                                                  background: 'rgba(100, 100, 100, 1)'
+                                                })
+                                              }}/>
                 <LoadingOverlay active={loading} spinner text='Loading Visualization' styles={{
                                                 overlay: (base) => ({
                                                   ...base,

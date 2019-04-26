@@ -18,7 +18,7 @@ const perturbUrl = values.AWSDNS + ":5000/perturb"
 
 class ImagePertubation extends Component {
   
-  state = {loading:false, image:false, class_names:default_classes, 
+  state = {loading:false, uploading:false, image:false, class_names:default_classes, 
             widthC:4, heightC:4, model:false,
             hasResult:false, result:null, region_probs:null, 
             toggleArea:true, curArea:-1}
@@ -67,8 +67,9 @@ class ImagePertubation extends Component {
   }
 
   onModelChange = e => {
-    const file = e[0]
+    this.setState({uploading:true})
 
+    const file = e[0]
     const data = new FormData()
     data.append('model', file)
 
@@ -78,7 +79,7 @@ class ImagePertubation extends Component {
       }).then(res => {
         return res.json()
       }).then(resp => {
-        this.setState({model:true})}
+        this.setState({model:true, uploading:false})}
         )
 
   }
@@ -177,9 +178,8 @@ class ImagePertubation extends Component {
   }
 
   
-  
   render() {
-    const {loading, hasResult, image, model} = this.state
+    const {loading, uploading, hasResult, image, model} = this.state
     const content = () => {
     return <div className='wrapper'>
               <div style={{display: "inline-block", padding:20, marginBottom:0}}>
@@ -209,6 +209,12 @@ class ImagePertubation extends Component {
               </div>
 
               <div style={{marginTop:50}}>
+                <LoadingOverlay active={uploading} spinner text='Uploading Model' styles={{
+                                                overlay: (base) => ({
+                                                  ...base,
+                                                  background: 'rgba(100, 100, 100, 1)'
+                                                })
+                                              }}/>
                 <LoadingOverlay active={loading} spinner text='Loading Visualization' styles={{
                                                 overlay: (base) => ({
                                                   ...base,

@@ -10,7 +10,7 @@ const uploadModelUrl = values.AWSDNS + ":5000/uploadModel"
 const saliencyUrl = values.AWSDNS + ":5000/saliency"
 
 class Saliency extends Component {
-  state = {loading:false, image:false, model:false,
+  state = {loading:false, uploading:false, image:false, model:false,
             widthC:3, heightC:3, hasResult:false,  
             originalImage:null, resultGrad:null, resultSmooth:null}
   
@@ -28,6 +28,7 @@ class Saliency extends Component {
   }
 
   onModelChange = e => {
+    this.setState({uploading:true})
     const file = e[0]
 
     const data = new FormData()
@@ -39,7 +40,7 @@ class Saliency extends Component {
       }).then(res => {
         return res.json()
       }).then(resp => {
-        this.setState({model:true})}
+        this.setState({model:true, uploading:false})}
         )
 
   }
@@ -62,7 +63,7 @@ class Saliency extends Component {
   }
   
   render() {
-    const {loading, hasResult, image, model} = this.state
+    const {loading, uploading, hasResult, image, model} = this.state
     const content = () => {
     return <div>
               <div style={{display: "inline-block", padding:20}}>
@@ -77,6 +78,12 @@ class Saliency extends Component {
               </div>
 
               <div style={{padding:10}}>
+                <LoadingOverlay active={uploading} spinner text='Uploading Model' styles={{
+                                                overlay: (base) => ({
+                                                  ...base,
+                                                  background: 'rgba(100, 100, 100, 1)'
+                                                })
+                                              }}/>
                 <LoadingOverlay active={loading} spinner text='Loading Visualization' styles={{
                                                 overlay: (base) => ({
                                                   ...base,
