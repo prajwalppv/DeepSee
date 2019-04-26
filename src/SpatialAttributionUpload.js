@@ -83,10 +83,10 @@ render(){
     const content = () => {
     return <div>
               <div style={{display: "inline-block", padding:20}}>
-                <UploadButton onChange={this.onImageChange} name='Image'/>
+                <UploadButton onChange={this.onModelChange} name='Model'/>
               </div>
               <div style={{display: "inline-block", padding:20}}>
-                <UploadButton onChange={this.onModelChange} name='Model'/>
+                <UploadButton onChange={this.onImageChange} name='Image'/>
               </div>
               <div style={{display: "inline-block", padding:20}}>
                 <Heading size={700} color='white' padding={20}> Choose layer1 </Heading>

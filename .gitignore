@@ -4,5 +4,7 @@ node_modules
 *.png
 *.h5
 *.pyc
+dns.js
+src/server_lucid/svelte_python/lucid_svelte.py
 src/server/currentImage
 __pycache__
