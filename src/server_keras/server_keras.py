@@ -86,7 +86,7 @@ def guidedBP():
   result_fileName = 'result.png'
 
   with Pool(1) as p:
-    p.apply(get_Guided_backProp, ('currentImage', 'model.h5', result_fileName))
+    p.apply(get_Guided_backProp, ('currentImage.png', 'model.h5', result_fileName))
 
   results['success'] = True
   results['originalImage'] = convertImage2String('currentImage.png')
