@@ -24,7 +24,6 @@ def convertImage2String(inputFile):
 @cross_origin()
 def uploadImage():
     results = {'success': False}
-    print('here')
     uploadedFile = flask.request.files['image']
     uploadedFile.save('currentImage.png')
     Image.open('currentImage.png').resize((224,224)).save('currentImage.png')
@@ -66,7 +65,7 @@ def neuronGroups():
     layer = flask.request.form['layer']
     group = flask.request.form['group']
     results = {'success':False}
-
+    print(Image.open('currentImage.png').shape)
     with closing(Pool(1)) as p:
       p.apply(callNeuronGroups, ("currentImage.png", str(layer), int(group)))
       p.terminate()
