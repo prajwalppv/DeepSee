@@ -27,7 +27,7 @@ def uploadImage():
     uploadedFile = flask.request.files['image']
     uploadedFile.save('currentImage.png')
 
-    Image.open('currentImage.png').resize((224,224)).save('currentImage.png')
+    Image.open('currentImage.png').resize((224,224)).convert('RGB').save('currentImage.png')
     print(Image.open('currentImage.png').size)
 
     results['success'] = True
