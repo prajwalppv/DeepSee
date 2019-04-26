@@ -13,7 +13,6 @@ class SemanticDictionary extends Component{
     state = {hoveredArea:null, activations:this.props.n, layer:this.props.layer, image:this.props.image};
     n = 14
     size = 500
-    URL = "./server_lucid/currentImage.png"
     MAP = {
       name: "my-map",
       areas: this.generateAreas(this.n,this.size)

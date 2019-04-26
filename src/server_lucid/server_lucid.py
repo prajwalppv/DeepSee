@@ -4,11 +4,13 @@ import base64
 from flask import request
 from semanticDict import googlenet_semantic_dict
 import os
+import base64
+
 from svelte_python.neuron_groups import callNeuronGroups
 from svelte_python.spatial_attr import callSpatialAttr
 from multiprocessing import Pool
 from contextlib import closing
-from PIL import 
+from PIL import Image
 
 app = flask.Flask(__name__)
 
@@ -17,7 +19,7 @@ def convertImage2String(inputFile):
       result = base64.b64encode(imageFile.read()).decode('utf-8')
       return result
 
-      
+
 @app.route("/uploadImage", methods=["POST"])
 @cross_origin()
 def uploadImage():
