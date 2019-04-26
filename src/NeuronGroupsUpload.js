@@ -84,12 +84,13 @@ render(){
     return <div>
 
               <div style={{display: "inline-block", padding:20}}>
-                <UploadButton onChange={this.onImageChange} name='Image'/>
+                <UploadButton onChange={this.onModelChange} name='Model'/>
               </div>
 
               <div style={{display: "inline-block", padding:20}}>
-                <UploadButton onChange={this.onModelChange} name='Model'/>
+                <UploadButton onChange={this.onImageChange} name='Image'/>
               </div>
+
 
               <div style={{display: "inline-block", padding:20}}>
                 <Heading size={600} color='white'> Choose a layer </Heading>
