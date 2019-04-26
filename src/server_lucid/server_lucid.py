@@ -55,7 +55,7 @@ def semanticDictionary():
       results['activations'] = p.apply(googlenet_semantic_dict, (layer, "currentImage.png"))
       p.terminate()
 
-    results['imagestr'] = convertImage2String('result.jpg')
+    results['imagestr'] = convertImage2String('currentImage.png')
     results['success'] = True
 
     return flask.jsonify(results)
