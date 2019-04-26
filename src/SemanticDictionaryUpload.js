@@ -50,7 +50,7 @@ state = {loading:false, image:false, hasResult:false,
               return res.json()
               })
         .then(response => {
-        this.setState({hasResult:true, loading:false, image:response['imagestr'],
+          this.setState({hasResult:true, loading:false, image:response['imagestr'],
                           activations:response['activations']});
         })
         .catch(e => console.error(e))

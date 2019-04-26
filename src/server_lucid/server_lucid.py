@@ -24,9 +24,8 @@ def convertImage2String(inputFile):
 @cross_origin()
 def uploadImage():
     results = {'success': False}
-
+    print('here')
     uploadedFile = flask.request.files['image']
-
     uploadedFile.save('currentImage.png')
     Image.open('currentImage.png').resize((224,224)).save('currentImage.png')
     results['success'] = True
@@ -50,7 +49,7 @@ def uploadModel():
 def semanticDictionary():
     layer = flask.request.form['layer']
     results = {'success': False}
-    print(layer)
+    # print(layer)
 
     with closing(Pool(1)) as p:
       results['activations'] = p.apply(googlenet_semantic_dict, (layer, "currentImage.png"))
