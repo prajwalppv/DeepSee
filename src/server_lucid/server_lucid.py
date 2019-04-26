@@ -8,6 +8,7 @@ from svelte_python.neuron_groups import callNeuronGroups
 from svelte_python.spatial_attr import callSpatialAttr
 from multiprocessing import Pool
 from contextlib import closing
+from PIL import 
 
 app = flask.Flask(__name__)
 
@@ -18,7 +19,9 @@ def uploadImage():
     results = {'success': False}
 
     uploadedFile = flask.request.files['image']
+
     uploadedFile.save('currentImage.png')
+    Image.open('currentImage.png').resize((224,224)).save('currentImage.png')
     results['success'] = True
 
     return flask.jsonify(results)

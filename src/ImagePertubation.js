@@ -19,7 +19,7 @@ const perturbUrl = values.AWSDNS + ":5000/perturb"
 class ImagePertubation extends Component {
   
   state = {loading:false, image:false, class_names:default_classes, 
-            widthC:3, heightC:3, model:false,
+            widthC:4, heightC:4, model:false,
             hasResult:false, result:null, region_probs:null, 
             toggleArea:true, curArea:-1}
   
@@ -186,7 +186,7 @@ class ImagePertubation extends Component {
                 <UploadButton onChange={this.onModelChange} name='Model'/>
                 <div>
                     <div style={{fontSize:"50%"}}>Number of Splits On Width</div>
-                    <TextInputField placeholder='3'
+                    <TextInputField placeholder='4'
                                     onChange={this.updateWidthChunks}/>
                 </div>
               </div>
@@ -194,7 +194,7 @@ class ImagePertubation extends Component {
                 <UploadButton onChange={this.onImageChange} name='Image'/>
                 <div>
                   <div style={{fontSize:'50%'}}>Number of Splits On Height</div>
-                  <TextInputField placeholder='3'
+                  <TextInputField placeholder='4'
                                   onChange={this.updateHeightChunks} style={{label_color:'red'}}/>
                 </div>
               </div>
